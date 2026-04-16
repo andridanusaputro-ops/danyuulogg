@@ -105,7 +105,7 @@
         .mood-name { font-size: 11px; color: var(--text-dim); font-weight: 600; letter-spacing: 1px; text-transform: uppercase;}
         .mood-emoji { font-size: 24px; margin-top: 5px; cursor: pointer; transition: 0.3s; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 12px; display: inline-block;}
         .mood-emoji:hover { transform: scale(1.1); background: rgba(255,255,255,0.1); }
-        .mood-text { font-size: 12px; font-weight: 600; margin-top: 5px; color: var(--text-main); }
+        .mood-text { font-size: 12px; font-weight: 500; margin-top: 5px; color: var(--text-main); }
         .status-text { font-size: 10px; color: var(--accent); font-style: italic; margin-top: 2px; }
 
         /* --- MODERN TABS --- */
@@ -241,7 +241,7 @@
                 <option value="Andri">Aku adalah: Andri 👦🏻</option>
                 <option value="Afifah">Aku adalah: Afifah 👩🏻</option>
             </select>
-            <input type="password" id="reg-secret" class="auth-input" placeholder="Ketik Kode Rahasia" style="border-color: var(--accent);">
+            <input type="password" id="reg-secret" class="auth-input" placeholder="Ketik Kode Rahasia Pasangan" style="border-color: var(--accent);">
             
             <button class="btn-auth" onclick="doRegister()">DAFTAR & MASUK</button>
             <div class="auth-switch" onclick="toggleAuth()">Udah punya akun? <span>Masuk di sini</span></div>
@@ -498,6 +498,7 @@
         let activeRole = localStorage.getItem('archive_role');
         let guestTimerInterval;
         let nextDateTargetTime = null;
+        let isAppStarted = false; // Mencegah dobel render listener
 
         const quotes = [
             "\"Dunia itu luas, tapi tempat favoritku cuma di sebelahmu.\"",
@@ -730,7 +731,7 @@
             saveLoginState(u, userData.role);
         };
 
-        // --- SISTEM MODE TAMU ANTI-BUG SUPER KETAT ---
+        // --- SISTEM PENGHAPUSAN BUG MODE TAMU ---
         function applyGuestMode() {
             try {
                 // Hapus total tab terlarang
@@ -745,7 +746,9 @@
                 
                 // Extra security: Loop semua button dan hide yang tulisannya "KELOLA HARI PENTING"
                 document.querySelectorAll('button').forEach(btn => {
-                    if(btn.innerText.includes('KELOLA HARI PENTING')) btn.style.display = 'none';
+                    if(btn.innerText.includes('KELOLA HARI PENTING') || btn.innerText.includes('Atur Jadwal') || btn.innerText.includes('Hapus')) {
+                        btn.style.display = 'none';
+                    }
                 });
 
                 const likeBtn = document.getElementById('btn-like-photo');
@@ -783,7 +786,7 @@
                         localStorage.removeItem('archive_username');
                         localStorage.removeItem('archive_role');
                         localStorage.removeItem('guest_start_time');
-                        setTimeout(() => location.reload(), 3000);
+                        setTimeout(() => location.reload(), 3000); // Reload paksa hanya setelah timer habis
                     } else {
                         timerEl.innerHTML = `<i class="fa fa-stopwatch"></i> Waktu Tamu: ${timeLeft} detik`;
                     }
@@ -794,26 +797,72 @@
             }
         }
 
+        // FUNGSI RESTORE KE MODE USER KALAU LOGIN
+        function applyUserMode() {
+            try {
+                if (guestTimerInterval) clearInterval(guestTimerInterval);
+                const timerEl = document.getElementById('guest-countdown');
+                if (timerEl) timerEl.remove();
+
+                ['tab-notes', 'tab-bucket', 'tab-game'].forEach(id => { const el = document.getElementById(id); if(el) el.style.display = ''; });
+                ['btn-add-floating', 'milestone-btn-container', 'btn-set-date-container'].forEach(id => { const el = document.getElementById(id); if(el) el.style.display = ''; });
+                
+                const likeBtn = document.getElementById('btn-like-photo');
+                if (likeBtn) likeBtn.style.pointerEvents = 'auto';
+
+                const widget = document.getElementById('dashboard-widget');
+                if (widget) {
+                    const hearts = widget.querySelectorAll('.corner-heart');
+                    for (let i = 0; i < hearts.length; i++) { hearts[i].style.display = 'none'; }
+                }
+            } catch(e) {}
+        }
+
         function saveLoginState(username, role) {
             localStorage.setItem('archive_username', username);
             localStorage.setItem('archive_role', role);
             activeUsername = username; activeRole = role;
             document.getElementById('auth-screen').style.display = 'none';
             document.getElementById('main-ui').style.display = 'block';
-            if(role === 'Tamu') applyGuestMode();
+            
+            if(role === 'Tamu') {
+                applyGuestMode();
+            } else {
+                applyUserMode();
+            }
             startApp();
         }
 
+        // --- SISTEM LOGOUT SOFT (ANTI CRASH) ---
         window.doLogout = () => {
             customConfirm("Keluar?", "Yakin mau keluar dari Archive?", () => {
                 localStorage.removeItem('archive_username');
                 localStorage.removeItem('archive_role');
                 localStorage.removeItem('guest_start_time');
-                location.reload();
+                if(guestTimerInterval) clearInterval(guestTimerInterval);
+                
+                closeCustomConfirm();
+
+                // Balikin ke layar auth tanpa location.reload()
+                document.getElementById('main-ui').style.display = 'none';
+                document.getElementById('quiz-screen').style.display = 'none';
+                document.getElementById('auth-screen').style.display = 'flex';
+                
+                document.getElementById('login-username').value = '';
+                document.getElementById('login-password').value = '';
+                
+                activeUsername = null;
+                activeRole = null;
+                currentFolderId = null;
+                
+                // Stop music if playing
+                const m = document.getElementById('bg-music');
+                const icon = document.getElementById('music-icon');
+                if(m && isPlaying) { m.pause(); icon.className = "fa fa-music"; isPlaying = false; }
             });
         };
 
-        // --- SISTEM UTAMA APP (ANTI-CRASH) ---
+        // --- SISTEM UTAMA APP ---
         function startApp() {
             const navGreet = document.getElementById('nav-greeting');
             if(navGreet) navGreet.innerText = activeRole === 'Tamu' ? 'Mode Tamu 👀' : `Halo, ${activeRole}!`;
@@ -821,70 +870,76 @@
             const dq = document.getElementById('daily-quote-text');
             if(dq) dq.innerText = quotes[Math.floor(Math.random() * quotes.length)];
             
-            setInterval(updateTimer, 1000); createHearts();
-            
-            onValue(ref(db, 'archive'), snap => {
-                const d = snap.val(); dataFolders = d ? Object.keys(d).map(k => ({...d[k], id: k})) : [];
-                renderFolders(); if(currentFolderId) renderPhotos(dataFolders.find(f => f.id === currentFolderId));
-            });
-            onValue(ref(db, 'notes'), snap => {
-                const d = snap.val(); dataNotes = d ? Object.keys(d).map(k => ({...d[k], id: k})) : [];
-                renderNotes();
-            });
-            onValue(ref(db, 'timecapsules'), snap => {
-                const d = snap.val(); dataCapsules = d ? Object.keys(d).map(k => ({...d[k], id: k})) : [];
-                renderCapsules();
-            });
-            onValue(ref(db, 'bucket'), snap => {
-                const d = snap.val(); dataBucket = d ? Object.keys(d).map(k => ({...d[k], id: k})) : [];
-                renderBucket();
-            });
-            onValue(ref(db, 'milestones'), snap => {
-                const d = snap.val(); dataMilestones = d ? Object.keys(d).map(k => ({...d[k], id: k})) : [];
-                renderMilestones();
-            });
-            onValue(ref(db, 'games'), snap => {
-                const d = snap.val(); dataGames = d ? Object.keys(d).map(k => ({...d[k], id: k})) : [];
-                renderGames();
-            });
-            
-            onValue(ref(db, 'nextDate'), snap => {
-                try {
-                    const d = snap.val();
-                    const titleEl = document.getElementById('next-date-title');
-                    const countEl = document.getElementById('next-date-countdown');
-                    const delBtn = document.getElementById('btn-delete-date');
-                    
-                    if(d && d.date) {
-                        if(titleEl) titleEl.innerText = d.title;
-                        nextDateTargetTime = new Date(d.date).getTime();
-                        if(delBtn && activeRole !== 'Tamu') delBtn.style.display = 'inline-block';
-                    } else {
-                        if(titleEl) titleEl.innerText = "Belum Ada Jadwal";
-                        if(countEl) countEl.innerText = "Yuk atur waktu berdua!";
-                        nextDateTargetTime = null;
-                        if(delBtn) delBtn.style.display = 'none';
-                    }
-                } catch(e) { console.error("Safe update nd:", e); }
-            });
-            
-            onValue(ref(db, 'moods'), snap => {
-                const d = snap.val() || {};
-                try {
-                    if(d.Andri) {
-                        const parts = d.Andri.split('|');
-                        const moodE = document.getElementById('mood-emoji-Andri'); if(moodE) moodE.innerText = parts[0] || '❓';
-                        const moodT = document.getElementById('mood-text-Andri'); if(moodT) moodT.innerText = parts[1] || 'Belum update';
-                        const statT = document.getElementById('status-text-Andri'); if(statT) statT.innerText = parts[2] ? `"${parts[2]}"` : '';
-                    }
-                    if(d.Afifah) {
-                        const parts = d.Afifah.split('|');
-                        const moodE = document.getElementById('mood-emoji-Afifah'); if(moodE) moodE.innerText = parts[0] || '❓';
-                        const moodT = document.getElementById('mood-text-Afifah'); if(moodT) moodT.innerText = parts[1] || 'Belum update';
-                        const statT = document.getElementById('status-text-Afifah'); if(statT) statT.innerText = parts[2] ? `"${parts[2]}"` : '';
-                    }
-                } catch(e) {}
-            });
+            if(!isAppStarted) {
+                setInterval(updateTimer, 1000); createHearts();
+                
+                onValue(ref(db, 'archive'), snap => {
+                    const d = snap.val(); dataFolders = d ? Object.keys(d).map(k => ({...d[k], id: k})) : [];
+                    renderFolders(); if(currentFolderId) renderPhotos(dataFolders.find(f => f.id === currentFolderId));
+                });
+                onValue(ref(db, 'notes'), snap => {
+                    const d = snap.val(); dataNotes = d ? Object.keys(d).map(k => ({...d[k], id: k})) : [];
+                    renderNotes();
+                });
+                onValue(ref(db, 'timecapsules'), snap => {
+                    const d = snap.val(); dataCapsules = d ? Object.keys(d).map(k => ({...d[k], id: k})) : [];
+                    renderCapsules();
+                });
+                onValue(ref(db, 'bucket'), snap => {
+                    const d = snap.val(); dataBucket = d ? Object.keys(d).map(k => ({...d[k], id: k})) : [];
+                    renderBucket();
+                });
+                onValue(ref(db, 'milestones'), snap => {
+                    const d = snap.val(); dataMilestones = d ? Object.keys(d).map(k => ({...d[k], id: k})) : [];
+                    renderMilestones();
+                });
+                onValue(ref(db, 'games'), snap => {
+                    const d = snap.val(); dataGames = d ? Object.keys(d).map(k => ({...d[k], id: k})) : [];
+                    renderGames();
+                });
+                
+                onValue(ref(db, 'nextDate'), snap => {
+                    try {
+                        const d = snap.val();
+                        const titleEl = document.getElementById('next-date-title');
+                        const countEl = document.getElementById('next-date-countdown');
+                        const delBtn = document.getElementById('btn-delete-date');
+                        
+                        if(d && d.date) {
+                            if(titleEl) titleEl.innerText = d.title;
+                            nextDateTargetTime = new Date(d.date).getTime();
+                            if(delBtn && activeRole !== 'Tamu') delBtn.style.display = 'inline-block';
+                        } else {
+                            if(titleEl) titleEl.innerText = "Belum Ada Jadwal";
+                            if(countEl) countEl.innerText = "Yuk atur waktu berdua!";
+                            nextDateTargetTime = null;
+                            if(delBtn) delBtn.style.display = 'none';
+                        }
+                    } catch(e) { console.error("Safe update nd:", e); }
+                });
+                
+                onValue(ref(db, 'moods'), snap => {
+                    const d = snap.val() || {};
+                    try {
+                        if(d.Andri) {
+                            const parts = d.Andri.split('|');
+                            const moodE = document.getElementById('mood-emoji-Andri'); if(moodE) moodE.innerText = parts[0] || '❓';
+                            const moodT = document.getElementById('mood-text-Andri'); if(moodT) moodT.innerText = parts[1] || 'Belum update';
+                            const statT = document.getElementById('status-text-Andri'); if(statT) statT.innerText = parts[2] ? `"${parts[2]}"` : '';
+                        }
+                        if(d.Afifah) {
+                            const parts = d.Afifah.split('|');
+                            const moodE = document.getElementById('mood-emoji-Afifah'); if(moodE) moodE.innerText = parts[0] || '❓';
+                            const moodT = document.getElementById('mood-text-Afifah'); if(moodT) moodT.innerText = parts[1] || 'Belum update';
+                            const statT = document.getElementById('status-text-Afifah'); if(statT) statT.innerText = parts[2] ? `"${parts[2]}"` : '';
+                        }
+                    } catch(e) {}
+                });
+                isAppStarted = true;
+            } else {
+                // Kalo udah jalan, cukup re-render sesuai role yang baru login
+                renderFolders(); renderNotes(); renderCapsules(); renderBucket(); renderMilestones(); renderGames();
+            }
         }
 
         // TRIGGER LOGIN OTOMATIS
@@ -894,6 +949,7 @@
             if(authS) authS.style.display = 'none';
             if(mainU) mainU.style.display = 'block';
             if(activeRole === 'Tamu') applyGuestMode();
+            else applyUserMode();
             startApp();
         }
 
@@ -1034,19 +1090,4 @@
             const cont = document.getElementById('bucket-container'); if(!cont) return;
             cont.innerHTML = '';
             dataBucket.forEach(b => {
-                const div = document.createElement('div'); div.className = `list-card ${b.done ? 'done' : ''}`;
-                div.innerHTML = `
-                    <button class="check-btn" onclick="toggleBucket('${b.id}', ${!b.done})"><i class="fa ${b.done ? 'fa-check-circle' : 'fa-circle'}"></i></button>
-                    <div class="list-text">${b.text}</div>
-                    <button onclick="window.deleteData('bucket/${b.id}')" style="color:#ff4757; background:none; border:none; font-size:16px; cursor:pointer;"><i class="fa fa-trash"></i></button>
-                `;
-                cont.appendChild(div);
-            });
-        }
-
-        function renderMilestones() {
-            const mainCont = document.getElementById('milestone-container'); if(!mainCont) return;
-            const manageCont = document.getElementById('ms-manage-list');
-            mainCont.innerHTML = ''; if(manageCont) manageCont.innerHTML = '';
-            dataMilestones.sort((a,b) => new Date(a.date) - new Date(b.date)).forEach(m => {
-                const dateStr = new Date(m.date).toLocaleDateString('id-ID',
+                const div = document.createElement('div'); div.className
