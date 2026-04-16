@@ -105,7 +105,8 @@
         .mood-name { font-size: 11px; color: var(--text-dim); font-weight: 600; letter-spacing: 1px; text-transform: uppercase;}
         .mood-emoji { font-size: 24px; margin-top: 5px; cursor: pointer; transition: 0.3s; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 12px; display: inline-block;}
         .mood-emoji:hover { transform: scale(1.1); background: rgba(255,255,255,0.1); }
-        .mood-text { font-size: 12px; font-weight: 500; margin-top: 5px; color: var(--text-main); }
+        .mood-text { font-size: 12px; font-weight: 600; margin-top: 5px; color: var(--text-main); }
+        .status-text { font-size: 10px; color: var(--accent); font-style: italic; margin-top: 2px; }
 
         /* --- MODERN TABS --- */
         .tabs { 
@@ -213,9 +214,9 @@
         <div class="modal-content" style="text-align: center; max-width: 320px; padding: 35px 25px;">
             <i class="fa fa-user-secret" style="font-size: 45px; color: #f39c12; margin-bottom: 15px; text-shadow: 0 0 15px rgba(243,156,18,0.5);"></i>
             <h3 style="margin: 0 0 10px 0; font-size: 20px; color: #f39c12;">Classified Area</h3>
-            <p style="font-size: 12px; color: var(--text-dim); margin-bottom: 20px;">Restricted access. Authentication required.</p>
-            <input type="password" id="secret-code-input" placeholder="••••••••••" style="text-align: center; letter-spacing: 5px; font-size: 18px; border-color:#f39c12;">
-            <button class="btn-auth" style="margin-top: 15px; background: linear-gradient(135deg, #f39c12, #e67e22); box-shadow: 0 5px 15px rgba(243,156,18,0.3);" onclick="verifySecretCode()">BYPASS</button>
+            <p style="font-size: 12px; color: var(--text-dim); margin-bottom: 20px;">Authentication required to bypass.</p>
+            <input type="password" id="secret-code-input" placeholder="••••••••••" style="text-align: center; letter-spacing: 5px; font-size: 18px; border-color:#f39c12; outline:none;">
+            <button class="btn-auth" style="margin-top: 15px; background: linear-gradient(135deg, #f39c12, #e67e22); box-shadow: 0 5px 15px rgba(243,156,18,0.3);" onclick="verifySecretCode()">BYPASS FIREWALL</button>
             <button class="btn-cancel" onclick="closeModal('secret-door-modal')">CANCEL</button>
         </div>
     </div>
@@ -297,11 +298,13 @@
                         <div class="mood-name">Andri 👦🏻</div>
                         <div class="mood-emoji" onclick="openMoodModal('Andri')" id="mood-emoji-Andri">❓</div>
                         <div class="mood-text" id="mood-text-Andri">Belum update</div>
+                        <div class="status-text" id="status-text-Andri"></div>
                     </div>
                     <div class="mood-item" style="border-left: 1px solid rgba(255,255,255,0.05);">
                         <div class="mood-name">Afifah 👩🏻</div>
                         <div class="mood-emoji" onclick="openMoodModal('Afifah')" id="mood-emoji-Afifah">❓</div>
                         <div class="mood-text" id="mood-text-Afifah">Belum update</div>
+                        <div class="status-text" id="status-text-Afifah"></div>
                     </div>
                 </div>
             </div>
@@ -369,7 +372,7 @@
     </div>
 
     <div id="mood-modal" class="modal"><div class="modal-content" style="text-align:center;">
-        <h3>Set Mood Kamu Hari Ini</h3>
+        <h3>Update Kondisi Kamu</h3>
         <select id="mood-selector" style="font-size: 16px; text-align:center;">
             <option value="😄|Lagi Seneng">😄 Lagi Seneng</option>
             <option value="🥺|Lagi Kangen">🥺 Lagi Kangen</option>
@@ -378,7 +381,8 @@
             <option value="👿|Lagi Bete/PMS">👿 Lagi Bete/PMS</option>
             <option value="😴|Ngantuk">😴 Ngantuk</option>
         </select>
-        <button class="btn-auth" onclick="saveMood()">UPDATE MOOD</button>
+        <input type="text" id="mood-status" placeholder="Lagi ngapain sekarang? (Cth: Nugas, rebahan)" style="margin-top:10px; font-size:13px;">
+        <button class="btn-auth" onclick="saveMood()">UPDATE STATUS</button>
         <button class="btn-cancel" onclick="closeModal('mood-modal')">Batal</button>
     </div></div>
 
@@ -506,6 +510,7 @@
         // --- SISTEM CUSTOM ALERT / CONFIRM ---
         window.customAlert = (title, message, type = 'info') => {
             const alertModal = document.getElementById('custom-alert');
+            if(!alertModal) return;
             const iconEl = document.getElementById('custom-alert-icon');
             const btnEl = document.getElementById('custom-alert-btn');
 
@@ -532,6 +537,7 @@
 
         window.customConfirm = (title, message, onConfirm) => {
             const confirmModal = document.getElementById('custom-confirm');
+            if(!confirmModal) return;
             document.getElementById('custom-confirm-title').innerText = title;
             document.getElementById('custom-confirm-msg').innerText = message;
             confirmModal.style.display = 'flex';
@@ -545,14 +551,17 @@
 
         // --- PINTU RAHASIA KUIS (BACKDOOR MODERN) ---
         let backdoorClicks = 0;
-        document.getElementById('secret-love-btn').onclick = () => {
-            backdoorClicks++;
-            if (backdoorClicks === 4) {
-                backdoorClicks = 0;
-                document.getElementById('secret-code-input').value = '';
-                openModal('secret-door-modal');
-            }
-        };
+        const secretBtn = document.getElementById('secret-love-btn');
+        if (secretBtn) {
+            secretBtn.onclick = () => {
+                backdoorClicks++;
+                if (backdoorClicks === 4) {
+                    backdoorClicks = 0;
+                    document.getElementById('secret-code-input').value = '';
+                    openModal('secret-door-modal');
+                }
+            };
+        }
 
         window.verifySecretCode = () => {
             const code = document.getElementById('secret-code-input').value;
@@ -617,14 +626,18 @@
         let currentQIndex = 0;
 
         window.startQuiz = () => {
-            document.getElementById('auth-screen').style.display = 'none';
-            document.getElementById('quiz-screen').style.display = 'flex';
+            const authScreen = document.getElementById('auth-screen');
+            const quizScreen = document.getElementById('quiz-screen');
+            if(authScreen) authScreen.style.display = 'none';
+            if(quizScreen) quizScreen.style.display = 'flex';
             generateNewQuizSet(null);
         };
 
         window.cancelQuiz = () => {
-            document.getElementById('quiz-screen').style.display = 'none';
-            document.getElementById('auth-screen').style.display = 'flex';
+            const authScreen = document.getElementById('auth-screen');
+            const quizScreen = document.getElementById('quiz-screen');
+            if(quizScreen) quizScreen.style.display = 'none';
+            if(authScreen) authScreen.style.display = 'flex';
         };
 
         function generateNewQuizSet(failedQuestion) {
@@ -638,8 +651,10 @@
 
         function renderQuiz() {
             const qData = activeQuizSet[currentQIndex];
-            document.getElementById('quiz-progress').innerText = `PERTANYAAN ${currentQIndex + 1} / 30`;
-            document.getElementById('quiz-question').innerText = qData.q;
+            const prog = document.getElementById('quiz-progress');
+            const qText = document.getElementById('quiz-question');
+            if(prog) prog.innerText = `PERTANYAAN ${currentQIndex + 1} / 30`;
+            if(qText) qText.innerText = qData.q;
             document.getElementById('btn-ans-a').innerText = `A. ${qData.a}`;
             document.getElementById('btn-ans-b').innerText = `B. ${qData.b}`;
             document.getElementById('btn-ans-c').innerText = `C. ${qData.c}`;
@@ -651,14 +666,15 @@
                 currentQIndex++;
                 if (currentQIndex >= 30) {
                     customAlert("Luar Biasa!", "Jawaban bener semua. Kamu lolos masuk sebagai Tamu Kehormatan! Waktu kamu cuma 1 MENIT!", "success");
-                    document.getElementById('quiz-screen').style.display = 'none';
+                    const qs = document.getElementById('quiz-screen');
+                    if(qs) qs.style.display = 'none';
                     localStorage.setItem('guest_start_time', Date.now());
                     saveLoginState('guest', 'Tamu');
                 } else {
                     renderQuiz();
                 }
             } else {
-                customAlert("TETOT!", "Jawaban salah! 🚨 Soal akan diacak ulang dengan soal baru dari awal!", "error");
+                customAlert("TETOT!", "Jawaban salah! 🚨 Soal diacak ulang dari awal!", "error");
                 generateNewQuizSet(currentQ);
             }
         };
@@ -667,8 +683,10 @@
         window.toggleAuth = () => {
             const loginBox = document.getElementById('login-box');
             const regBox = document.getElementById('register-box');
-            if(loginBox.style.display === 'none') { loginBox.style.display = 'block'; regBox.style.display = 'none'; }
-            else { loginBox.style.display = 'none'; regBox.style.display = 'block'; }
+            if (loginBox && regBox) {
+                if(loginBox.style.display === 'none') { loginBox.style.display = 'block'; regBox.style.display = 'none'; }
+                else { loginBox.style.display = 'none'; regBox.style.display = 'block'; }
+            }
         };
 
         window.doRegister = async () => {
@@ -712,16 +730,23 @@
             saveLoginState(u, userData.role);
         };
 
-        // --- SISTEM MODE TAMU ANTI-BUG ---
+        // --- SISTEM MODE TAMU ANTI-BUG SUPER KETAT ---
         function applyGuestMode() {
             try {
-                // Sembunyiin menu tab terlarang 
-                const tabsToHide = ['tab-notes', 'tab-bucket', 'tab-game'];
-                tabsToHide.forEach(id => { const el = document.getElementById(id); if(el) el.style.display = 'none'; });
+                // Hapus total tab terlarang
+                ['tab-notes', 'tab-bucket', 'tab-game'].forEach(id => { 
+                    const el = document.getElementById(id); if(el) el.style.display = 'none'; 
+                });
 
-                // Sembunyiin tombol khusus admin/pasangan
-                const btnsToHide = ['btn-add-floating', 'milestone-btn-container', 'btn-set-date-container', 'btn-delete-folder', 'btn-del-photo'];
-                btnsToHide.forEach(id => { const el = document.getElementById(id); if(el) el.style.display = 'none'; });
+                // Hapus total tombol admin/pasangan
+                ['btn-add-floating', 'milestone-btn-container', 'btn-set-date-container', 'btn-delete-folder', 'btn-del-photo'].forEach(id => { 
+                    const el = document.getElementById(id); if(el) el.style.display = 'none'; 
+                });
+                
+                // Extra security: Loop semua button dan hide yang tulisannya "KELOLA HARI PENTING"
+                document.querySelectorAll('button').forEach(btn => {
+                    if(btn.innerText.includes('KELOLA HARI PENTING')) btn.style.display = 'none';
+                });
 
                 const likeBtn = document.getElementById('btn-like-photo');
                 if (likeBtn) likeBtn.style.pointerEvents = 'none';
@@ -765,7 +790,7 @@
                 }, 1000);
 
             } catch(e) {
-                console.error("Guest mode error teratasi:", e);
+                console.error("Guest mode load aman:", e);
             }
         }
 
@@ -788,10 +813,13 @@
             });
         };
 
-        // --- SISTEM UTAMA APP ---
+        // --- SISTEM UTAMA APP (ANTI-CRASH) ---
         function startApp() {
-            document.getElementById('nav-greeting').innerText = activeRole === 'Tamu' ? 'Mode Tamu 👀' : `Halo, ${activeRole}!`;
-            document.getElementById('daily-quote-text').innerText = quotes[Math.floor(Math.random() * quotes.length)];
+            const navGreet = document.getElementById('nav-greeting');
+            if(navGreet) navGreet.innerText = activeRole === 'Tamu' ? 'Mode Tamu 👀' : `Halo, ${activeRole}!`;
+            
+            const dq = document.getElementById('daily-quote-text');
+            if(dq) dq.innerText = quotes[Math.floor(Math.random() * quotes.length)];
             
             setInterval(updateTimer, 1000); createHearts();
             
@@ -819,70 +847,97 @@
                 const d = snap.val(); dataGames = d ? Object.keys(d).map(k => ({...d[k], id: k})) : [];
                 renderGames();
             });
+            
             onValue(ref(db, 'nextDate'), snap => {
-                const d = snap.val();
-                const delBtn = document.getElementById('btn-delete-date');
-                if(d && d.date) {
-                    document.getElementById('next-date-title').innerText = d.title;
-                    nextDateTargetTime = new Date(d.date).getTime();
-                    if(delBtn) delBtn.style.display = 'inline-block';
-                } else {
-                    document.getElementById('next-date-title').innerText = "Belum Ada Jadwal";
-                    document.getElementById('next-date-countdown').innerText = "Yuk atur waktu berdua!";
-                    nextDateTargetTime = null;
-                    if(delBtn) delBtn.style.display = 'none';
-                }
+                try {
+                    const d = snap.val();
+                    const titleEl = document.getElementById('next-date-title');
+                    const countEl = document.getElementById('next-date-countdown');
+                    const delBtn = document.getElementById('btn-delete-date');
+                    
+                    if(d && d.date) {
+                        if(titleEl) titleEl.innerText = d.title;
+                        nextDateTargetTime = new Date(d.date).getTime();
+                        if(delBtn && activeRole !== 'Tamu') delBtn.style.display = 'inline-block';
+                    } else {
+                        if(titleEl) titleEl.innerText = "Belum Ada Jadwal";
+                        if(countEl) countEl.innerText = "Yuk atur waktu berdua!";
+                        nextDateTargetTime = null;
+                        if(delBtn) delBtn.style.display = 'none';
+                    }
+                } catch(e) { console.error("Safe update nd:", e); }
             });
+            
             onValue(ref(db, 'moods'), snap => {
                 const d = snap.val() || {};
-                if(d.Andri) {
-                    const parts = d.Andri.split('|');
-                    document.getElementById('mood-emoji-Andri').innerText = parts[0];
-                    document.getElementById('mood-text-Andri').innerText = parts[1];
-                }
-                if(d.Afifah) {
-                    const parts = d.Afifah.split('|');
-                    document.getElementById('mood-emoji-Afifah').innerText = parts[0];
-                    document.getElementById('mood-text-Afifah').innerText = parts[1];
-                }
+                try {
+                    if(d.Andri) {
+                        const parts = d.Andri.split('|');
+                        const moodE = document.getElementById('mood-emoji-Andri'); if(moodE) moodE.innerText = parts[0] || '❓';
+                        const moodT = document.getElementById('mood-text-Andri'); if(moodT) moodT.innerText = parts[1] || 'Belum update';
+                        const statT = document.getElementById('status-text-Andri'); if(statT) statT.innerText = parts[2] ? `"${parts[2]}"` : '';
+                    }
+                    if(d.Afifah) {
+                        const parts = d.Afifah.split('|');
+                        const moodE = document.getElementById('mood-emoji-Afifah'); if(moodE) moodE.innerText = parts[0] || '❓';
+                        const moodT = document.getElementById('mood-text-Afifah'); if(moodT) moodT.innerText = parts[1] || 'Belum update';
+                        const statT = document.getElementById('status-text-Afifah'); if(statT) statT.innerText = parts[2] ? `"${parts[2]}"` : '';
+                    }
+                } catch(e) {}
             });
         }
 
+        // TRIGGER LOGIN OTOMATIS
         if(activeUsername && activeRole) {
-            document.getElementById('auth-screen').style.display = 'none';
-            document.getElementById('main-ui').style.display = 'block';
+            const authS = document.getElementById('auth-screen');
+            const mainU = document.getElementById('main-ui');
+            if(authS) authS.style.display = 'none';
+            if(mainU) mainU.style.display = 'block';
             if(activeRole === 'Tamu') applyGuestMode();
             startApp();
         }
 
-        // --- SISTEM MOOD ---
+        // --- SISTEM MOOD & STATUS ---
         let targetMoodRole = "";
         window.openMoodModal = (role) => {
             if(activeRole === 'Tamu') return customAlert('Dilarang!', 'Sstt! Cuma Andri & Afifah yang bisa ngubah mood! 😝', 'error');
             if(role !== activeRole) return customAlert('Eits!', `Kamu gak bisa ganti mood punya ${role} yaa! 😝`, 'error');
-            targetMoodRole = role; openModal('mood-modal');
+            targetMoodRole = role; 
+            document.getElementById('mood-status').value = ''; // Reset input status
+            openModal('mood-modal');
         };
         window.saveMood = () => {
-            const val = document.getElementById('mood-selector').value;
-            set(ref(db, `moods/${targetMoodRole}`), val); closeModal('mood-modal');
+            const mood = document.getElementById('mood-selector').value;
+            const status = document.getElementById('mood-status').value;
+            set(ref(db, `moods/${targetMoodRole}`), `${mood}|${status}`); 
+            closeModal('mood-modal');
         };
 
         // --- NAVIGASI TABS ---
         window.switchView = (v) => {
-            ['home-view','notes-view','bucket-view','album-view', 'game-view'].forEach(id => document.getElementById(id).style.display='none');
-            ['tab-gallery','tab-notes','tab-bucket', 'tab-game'].forEach(id => document.getElementById(id).classList.remove('active'));
+            ['home-view','notes-view','bucket-view','album-view', 'game-view'].forEach(id => {
+                const el = document.getElementById(id); if(el) el.style.display='none';
+            });
+            ['tab-gallery','tab-notes','tab-bucket', 'tab-game'].forEach(id => {
+                const el = document.getElementById(id); if(el) el.classList.remove('active');
+            });
             
-            if(v === 'gallery') { document.getElementById('home-view').style.display='block'; document.getElementById('tab-gallery').classList.add('active'); currentFolderId = null; }
-            if(v === 'notes') { document.getElementById('notes-view').style.display='block'; document.getElementById('tab-notes').classList.add('active'); }
-            if(v === 'bucket') { document.getElementById('bucket-view').style.display='block'; document.getElementById('tab-bucket').classList.add('active'); }
-            if(v === 'game') { document.getElementById('game-view').style.display='block'; document.getElementById('tab-game').classList.add('active'); }
-            if(v === 'album') { document.getElementById('album-view').style.display='block'; }
+            const setV = (viewId, tabId) => {
+                const view = document.getElementById(viewId); if(view) view.style.display='block';
+                const tab = document.getElementById(tabId); if(tab) tab.classList.add('active');
+            };
+
+            if(v === 'gallery') { setV('home-view', 'tab-gallery'); currentFolderId = null; }
+            if(v === 'notes') setV('notes-view', 'tab-notes');
+            if(v === 'bucket') setV('bucket-view', 'tab-bucket');
+            if(v === 'game') setV('game-view', 'tab-game');
+            if(v === 'album') { const view = document.getElementById('album-view'); if(view) view.style.display='block'; }
         };
 
         // --- RENDER FUNCTIONS ---
         function renderFolders() {
-            const cont = document.getElementById('folder-container');
-            const sel = document.getElementById('upload-target');
+            const cont = document.getElementById('folder-container'); if(!cont) return;
+            const sel = document.getElementById('upload-target'); if(!sel) return;
             cont.innerHTML = ''; sel.innerHTML = '<option value="new">-- Buat Folder Baru --</option>';
             dataFolders.forEach(f => {
                 const div = document.createElement('div'); div.className='folder-card';
@@ -894,7 +949,8 @@
         }
 
         function renderPhotos(f) {
-            const cont = document.getElementById('photo-container'); cont.innerHTML = '';
+            const cont = document.getElementById('photo-container'); if(!cont) return;
+            cont.innerHTML = '';
             if(!f || !f.photos) return cont.innerHTML = '<p style="color:#666;">Belum ada foto.</p>';
             Object.keys(f.photos).reverse().forEach(k => {
                 const p = f.photos[k]; const div = document.createElement('div'); div.className='folder-card';
@@ -905,7 +961,8 @@
         }
 
         function renderNotes() {
-            const cont = document.getElementById('notes-container'); cont.innerHTML = '';
+            const cont = document.getElementById('notes-container'); if(!cont) return;
+            cont.innerHTML = '';
             dataNotes.reverse().forEach(n => {
                 const div = document.createElement('div'); 
                 let senderName, senderClass, borderStyle;
@@ -917,7 +974,7 @@
                     senderName = '👩🏻 Afifah'; senderClass = 'sender-Afifah'; borderStyle = 'border-left: 4px solid var(--accent);';
                 }
                 
-                // CUMA SENDER ASLI YANG BISA HAPUS
+                // PRIVASI HAPUS DATA: HANYA SI PENGIRIM ASLI BISA MENGHAPUS!
                 let canDelete = (realSender === activeRole && activeRole !== 'Tamu');
                 
                 div.className='list-card'; div.style = borderStyle;
@@ -936,13 +993,14 @@
         }
 
         function renderCapsules() {
-            const cont = document.getElementById('capsules-container'); cont.innerHTML = '';
+            const cont = document.getElementById('capsules-container'); if(!cont) return;
+            cont.innerHTML = '';
             dataCapsules.reverse().forEach(c => {
                 const div = document.createElement('div'); 
                 const unlockTime = new Date(c.unlockDate).getTime();
                 const isUnlocked = Date.now() >= unlockTime;
                 
-                // CUMA SENDER ASLI YANG BISA HAPUS
+                // PRIVASI HAPUS DATA: HANYA SI PENGIRIM ASLI BISA MENGHAPUS!
                 let canDelete = (c.sender === activeRole && activeRole !== 'Tamu');
                 
                 div.className='list-card'; div.style = 'border-left: 4px solid var(--capsule-color); background: rgba(243, 156, 18, 0.05);';
@@ -973,7 +1031,8 @@
         }
 
         function renderBucket() {
-            const cont = document.getElementById('bucket-container'); cont.innerHTML = '';
+            const cont = document.getElementById('bucket-container'); if(!cont) return;
+            cont.innerHTML = '';
             dataBucket.forEach(b => {
                 const div = document.createElement('div'); div.className = `list-card ${b.done ? 'done' : ''}`;
                 div.innerHTML = `
@@ -986,301 +1045,8 @@
         }
 
         function renderMilestones() {
-            const mainCont = document.getElementById('milestone-container');
+            const mainCont = document.getElementById('milestone-container'); if(!mainCont) return;
             const manageCont = document.getElementById('ms-manage-list');
-            mainCont.innerHTML = ''; manageCont.innerHTML = '';
+            mainCont.innerHTML = ''; if(manageCont) manageCont.innerHTML = '';
             dataMilestones.sort((a,b) => new Date(a.date) - new Date(b.date)).forEach(m => {
-                const dateStr = new Date(m.date).toLocaleDateString('id-ID', {day:'numeric', month:'short', year:'numeric'});
-                mainCont.innerHTML += `<div class="milestone-item"><span>${m.title}</span><span>${dateStr}</span></div>`;
-                manageCont.innerHTML += `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; font-size:12px; background:rgba(255,255,255,0.05); padding:8px 12px; border-radius:8px;">${m.title} <br><span style="color:#a0a0a0">${dateStr}</span> <button onclick="window.deleteData('milestones/${m.id}')" style="color:#ff4757; background:none; border:none; cursor:pointer;"><i class="fa fa-times"></i></button></div>`;
-            });
-        }
-
-        function renderGames() {
-            const cont = document.getElementById('games-container'); cont.innerHTML = '';
-            dataGames.reverse().forEach(g => {
-                const div = document.createElement('div'); 
-                div.className = 'list-card';
-                
-                if (g.target === activeRole) {
-                    // Kalau ini soal buat gue, TAPI GAK ADA TOMBOL HAPUS (kecuali buat yg ngirim)
-                    if (g.isSolved) {
-                        div.style = 'border-left: 4px solid #2ed573; background: rgba(46, 213, 115, 0.05); display:block; text-align:center; padding: 25px 15px;';
-                        div.innerHTML = `
-                            <i class="fa fa-unlock" style="font-size:28px; color:#2ed573; margin-bottom:10px;"></i>
-                            <div style="font-weight:600; color:#2ed573; font-size:16px;">Reward Terbuka!</div>
-                            <div style="font-size:12px; color:var(--text-dim); margin-top:5px; margin-bottom: 15px;">Kamu berhasil jawab tebakan dari ${g.sender}</div>
-                            <button class="btn-auth" style="margin:0; padding:12px; font-size:13px; background: linear-gradient(135deg, #2ed573, #7bed9f);" onclick="openLightbox('${g.rewardPhoto}', 'game_reward', ${g.timestamp}, false)"><i class="fa fa-image"></i> LIHAT REWARD FOTO</button>
-                        `;
-                    } else {
-                        div.style = 'border-left: 4px solid #ff4757; background: rgba(255, 71, 87, 0.05); display:block; text-align:center; padding: 25px 15px;';
-                        div.innerHTML = `
-                            <i class="fa fa-gift" style="font-size:28px; color:#ff4757; margin-bottom:10px;"></i>
-                            <div style="font-weight:600; color:#ff4757; font-size:16px;">Tebakan dari ${g.sender}!</div>
-                            <div style="font-size:12px; color:var(--text-dim); margin-top:5px; margin-bottom: 15px;">Jawab dengan benar buat dapetin foto rahasia.</div>
-                            <button class="btn-auth" style="margin:0; padding:12px; font-size:13px; background: linear-gradient(135deg, #ff4757, #ff6b81);" onclick="openAnswerModal('${g.id}')">JAWAB SEKARANG</button>
-                        `;
-                    }
-                } 
-                else if (g.sender === activeRole) {
-                    // CUMA SENDER ASLI YANG BISA HAPUS GAME
-                    div.style = 'border-left: 4px solid var(--text-dim); background: rgba(255, 255, 255, 0.02); display:flex;';
-                    div.innerHTML = `
-                        <div class="list-text">
-                            <div style="font-size:11px; font-weight:600; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.5px;">Buatanmu buat ${g.target}</div>
-                            <div style="margin-top:5px; font-size:13px;">Status: <b>${g.isSolved ? '<span style="color:#2ed573">Berhasil Dijawab! 🔓</span>' : '<span style="color:#ff4757">Belum Terjawab 🔒</span>'}</b></div>
-                        </div>
-                        <button onclick="window.deleteData('games/${g.id}')" style="color:#ff4757; background:none; border:none; cursor:pointer;"><i class="fa fa-trash"></i></button>
-                    `;
-                }
-
-                if (g.target === activeRole || g.sender === activeRole) {
-                    cont.appendChild(div);
-                }
-            });
-        }
-
-        // --- ACTIONS & MODALS ---
-        window.openModal = id => document.getElementById(id).style.display = 'flex';
-        window.closeModal = id => document.getElementById(id).style.display = 'none';
-        
-        window.deleteData = path => { 
-            customConfirm("Hapus Data?", "Yakin mau hapus data ini permanen?", () => {
-                remove(ref(db, path));
-            });
-        };
-
-        // --- FUNGSI HAPUS JADWAL NGEDATE ---
-        window.deleteNextDate = () => {
-            customConfirm("Hapus Jadwal?", "Yakin mau hapus jadwal ngedate ini?", () => {
-                remove(ref(db, 'nextDate'));
-            });
-        };
-
-        document.getElementById('btn-process-upload').onclick = async () => {
-            const btn = document.getElementById('btn-process-upload'); const files = document.getElementById('file-input').files;
-            if(!files.length) return customAlert("Tunggu!", "Pilih fotonya dulu dong sebelum upload!", "info");
-            btn.innerText = "Mengupload..."; btn.disabled = true;
-            const target = document.getElementById('upload-target').value;
-            let fId = target;
-            if(target === "new") {
-                const nRef = push(ref(db, 'archive')); fId = nRef.key;
-                await set(nRef, {name: (document.getElementById('new-folder-name').value || "NEW FOLDER").toUpperCase()});
-            }
-            for(let f of files) {
-                const b64 = await compress(f);
-                await push(ref(db, `archive/${fId}/photos`), {url: b64, timestamp: Date.now(), liked: false});
-            }
-            btn.innerText = "UPLOAD FOTO"; btn.disabled = false; document.getElementById('file-input').value = ''; closeModal('upload-modal');
-        };
-
-        document.getElementById('btn-save-note').onclick = () => {
-            const t = document.getElementById('note-input').value;
-            if(t) push(ref(db, 'notes'), {text: t, timestamp: Date.now(), sender: activeRole});
-            document.getElementById('note-input').value = ''; closeModal('note-modal');
-        };
-
-        window.saveCapsule = () => {
-            const t = document.getElementById('capsule-input').value;
-            const d = document.getElementById('capsule-date').value;
-            if(!t || !d) return customAlert("Belum Lengkap!", "Isi pesan dan pilih tanggal bukanya ya!", "info");
-            
-            push(ref(db, 'timecapsules'), {text: t, unlockDate: d, sender: activeRole, timestamp: Date.now()});
-            document.getElementById('capsule-input').value = ''; document.getElementById('capsule-date').value = '';
-            closeModal('capsule-modal');
-        };
-
-        window.sendKangenPing = () => {
-            const emoji = activeRole === 'Andri' ? '👦🏻' : '👩🏻';
-            const msg = `🚨 PING DARURAT! 🚨\n\n${emoji} ${activeRole} lagi kangen berat banget nih sama kamu! Buruan bales atau samperin sekarang! 🥺❤️`;
-            push(ref(db, 'notes'), {text: msg, timestamp: Date.now(), sender: activeRole});
-            customAlert("Terkirim!", "Ping kangen berhasil dikirim ke chat! 🥺❤️", "success");
-        };
-
-        document.getElementById('btn-save-bucket').onclick = () => {
-            const t = document.getElementById('bucket-input').value;
-            if(t) push(ref(db, 'bucket'), {text: t, done: false});
-            document.getElementById('bucket-input').value = ''; closeModal('bucket-modal');
-        };
-        window.toggleBucket = (id, s) => { if(activeRole !== 'Tamu') update(ref(db, `bucket/${id}`), {done: s}); };
-        
-        window.openMilestoneModal = () => openModal('milestone-modal');
-        document.getElementById('btn-save-ms').onclick = () => {
-            const t = document.getElementById('ms-title').value, d = document.getElementById('ms-date').value;
-            if(t && d) push(ref(db, 'milestones'), {title: t, date: d});
-            document.getElementById('ms-title').value = ''; document.getElementById('ms-date').value = '';
-        };
-
-        window.saveNextDate = () => {
-            const t = document.getElementById('nd-title').value;
-            const d = document.getElementById('nd-date').value;
-            if(!t || !d) return customAlert("Isi dong!", "Mau ngedate ke mana dan kapan nih?", "error");
-            set(ref(db, 'nextDate'), {title: t, date: d});
-            document.getElementById('nd-title').value = ''; document.getElementById('nd-date').value = '';
-            closeModal('next-date-modal');
-        };
-
-        // --- GAME ACTIONS ---
-        document.getElementById('btn-save-game').onclick = async () => {
-            const q = document.getElementById('game-question').value;
-            const a = document.getElementById('game-answer').value;
-            const file = document.getElementById('game-photo').files[0];
-            
-            if(!q || !a || !file) return customAlert("Belum Lengkap", "Isi pertanyaan, jawaban, dan upload fotonya dulu ya!", "error");
-            
-            const btn = document.getElementById('btn-save-game');
-            btn.innerText = "MENYIMPAN..."; btn.disabled = true;
-            
-            const b64 = await compress(file);
-            const target = activeRole === 'Andri' ? 'Afifah' : 'Andri';
-            
-            await push(ref(db, 'games'), {
-                sender: activeRole,
-                target: target,
-                question: q,
-                answer: a.toLowerCase().trim(),
-                rewardPhoto: b64,
-                isSolved: false,
-                timestamp: Date.now()
-            });
-            
-            btn.innerText = "SIMPAN GAME"; btn.disabled = false;
-            document.getElementById('game-question').value = '';
-            document.getElementById('game-answer').value = '';
-            document.getElementById('game-photo').value = '';
-            closeModal('create-game-modal');
-            customAlert("Berhasil!", `Tebakan berhasil dikirim ke ${target}! Tinggal nunggu dia bisa jawab apa nggak wkwk`, "success");
-        };
-
-        window.openAnswerModal = (id) => {
-            const g = dataGames.find(x => x.id === id);
-            if(!g) return;
-            document.getElementById('ans-game-title').innerText = `Dari: ${g.sender}`;
-            document.getElementById('ans-game-question').innerText = `"${g.question}"`;
-            document.getElementById('ans-game-id').value = id;
-            document.getElementById('ans-game-input').value = '';
-            openModal('answer-game-modal');
-        };
-
-        window.checkGameAnswer = () => {
-            const id = document.getElementById('ans-game-id').value;
-            const ansInput = document.getElementById('ans-game-input').value.toLowerCase().trim();
-            const g = dataGames.find(x => x.id === id);
-            
-            if(!ansInput) return;
-            
-            if (ansInput === g.answer) {
-                update(ref(db, `games/${id}`), {isSolved: true});
-                closeModal('answer-game-modal');
-                customAlert("YAY BENAR! 🎉", "Jawaban kamu pas banget! Selamat menikmati foto rahasianya 😍", "success");
-                setTimeout(() => openLightbox(g.rewardPhoto, 'game_reward', g.timestamp, false), 2000);
-            } else {
-                customAlert("TETOT!", "Jawaban kamu salah! Coba pikir-pikir lagi deh 😝", "error");
-            }
-        };
-
-        document.getElementById('btn-delete-folder').onclick = () => {
-            customConfirm("Hapus Folder?", "Hapus seluruh folder ini beserta foto di dalamnya? Gak bisa dibalikin lho!", () => {
-                remove(ref(db, `archive/${currentFolderId}`)); 
-                switchView('gallery');
-            });
-        };
-
-        // --- LIGHTBOX ---
-        window.openLightbox = (url, id, ts, liked) => {
-            activePhoto = {url, id, ts, liked};
-            document.getElementById('lightbox').style.display='flex'; document.getElementById('lightbox-img').src=url;
-            document.getElementById('lb-date').innerText = new Date(ts).toLocaleDateString('id-ID');
-            
-            if (id === 'game_reward') {
-                document.getElementById('btn-like-photo').style.display = 'none';
-                document.getElementById('btn-del-photo').style.display = 'none';
-            } else {
-                document.getElementById('btn-like-photo').style.display = 'block';
-                document.getElementById('btn-del-photo').style.display = 'block';
-                document.getElementById('btn-like-photo').className = `btn-heart ${liked ? 'active' : ''}`;
-            }
-        };
-        window.closeLightbox = () => document.getElementById('lightbox').style.display='none';
-        window.toggleLike = () => {
-            if(activeRole === 'Tamu') return;
-            if(activePhoto.id === 'game_reward') return; 
-            activePhoto.liked = !activePhoto.liked;
-            update(ref(db, `archive/${currentFolderId}/photos/${activePhoto.id}`), {liked: activePhoto.liked});
-            document.getElementById('btn-like-photo').className = `btn-heart ${activePhoto.liked ? 'active' : ''}`;
-        };
-        document.getElementById('btn-del-photo').onclick = async () => {
-            if(activePhoto.id === 'game_reward') return; 
-            customConfirm("Hapus Foto?", "Yakin mau hapus foto ini selamanya?", async () => {
-                await remove(ref(db, `archive/${currentFolderId}/photos/${activePhoto.id}`)); 
-                closeLightbox();
-            });
-        };
-        document.getElementById('btn-dl-photo').onclick = () => {
-            const a = document.createElement('a'); a.href = activePhoto.url; a.download = `Memories_${activePhoto.ts}.jpg`; a.target = '_blank'; a.click();
-        };
-
-        window.showRandomMemory = () => {
-            const all = [];
-            dataFolders.forEach(f => { if(f.photos) Object.keys(f.photos).forEach(k => all.push({...f.photos[k], id: k, fId: f.id})); });
-            if(!all.length) return customAlert("Kosong", "Belum ada foto yang bisa di-random nih!", "info");
-            const r = all[Math.floor(Math.random()*all.length)];
-            currentFolderId = r.fId; openLightbox(r.url, r.id, r.timestamp, r.liked);
-        };
-
-        // --- HELPERS ---
-        async function compress(file) {
-            return new Promise(res => {
-                const r = new FileReader();
-                r.onload = e => {
-                    const img = new Image();
-                    img.onload = () => {
-                        const canvas = document.createElement('canvas');
-                        const MAX = 1080; let w = img.width, h = img.height;
-                        if(w > MAX) { h *= MAX/w; w = MAX; }
-                        canvas.width = w; canvas.height = h;
-                        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-                        res(canvas.toDataURL('image/jpeg', 0.8));
-                    };
-                    img.src = e.target.result;
-                };
-                r.readAsDataURL(file);
-            });
-        }
-
-        function updateTimer() {
-            const diff = Date.now() - new Date("2025-11-22T00:00:00").getTime();
-            const d = Math.floor(diff/86400000), h = Math.floor((diff%86400000)/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000);
-            document.getElementById('love-timer').innerText = `${d} HARI, ${h} JAM, ${m} MNT, ${s} DTK`;
-
-            if (nextDateTargetTime) {
-                const diffND = nextDateTargetTime - Date.now();
-                if (diffND > 0) {
-                    const ndD = Math.floor(diffND/86400000), ndH = Math.floor((diffND%86400000)/3600000), ndM = Math.floor((diffND%3600000)/60000), ndS = Math.floor((diffND%60000)/1000);
-                    document.getElementById('next-date-countdown').innerText = `${ndD}H ${ndH}J ${ndM}M ${ndS}D lagi! 😍`;
-                } else {
-                    document.getElementById('next-date-countdown').innerText = "Waktunya Kencan!! 🎉";
-                }
-            }
-        }
-
-        function createHearts() {
-            setInterval(() => {
-                const h = document.createElement('div'); h.className='heart-bg'; h.innerHTML='🤍';
-                h.style.left = Math.random()*100+'vw'; h.style.animationDuration = (Math.random()*4+3)+'s';
-                document.getElementById('hearts-container').appendChild(h);
-                setTimeout(() => h.remove(), 6000);
-            }, 1500);
-        }
-
-        let isPlaying = false;
-        window.toggleMusic = () => {
-            const m = document.getElementById('bg-music');
-            const icon = document.getElementById('music-icon');
-            if(isPlaying) { m.pause(); icon.className = "fa fa-music"; }
-            else { m.play(); icon.className = "fa fa-pause"; }
-            isPlaying = !isPlaying;
-        };
-    </script>
-</body>
-</html>
+                const dateStr = new Date(m.date).toLocaleDateString('id-ID',
