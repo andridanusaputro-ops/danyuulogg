@@ -40,7 +40,6 @@
             background: var(--card-bg); padding: 40px 30px; border-radius: 24px; text-align: center;
             width: 85%; max-width: 350px; border: 1px solid var(--border-light); 
             box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 20px var(--accent-glow);
-            position: relative;
         }
         .auth-box h2 { font-weight: 600; margin-bottom: 5px; color: var(--text-main); }
         .auth-box h2 span { color: var(--accent); }
@@ -85,14 +84,7 @@
             background: linear-gradient(145deg, #1e2029, #15161c); 
             border-radius: 20px; border: 1px solid var(--border-light);
             box-shadow: 0 10px 30px rgba(0,0,0,0.3); padding: 20px; margin-bottom: 25px;
-            position: relative;
         }
-        
-        .corner-heart {
-            position: absolute; color: var(--accent); font-size: 16px; opacity: 0.8; 
-            filter: drop-shadow(0 0 5px var(--accent-glow)); pointer-events: none; display: none;
-        }
-
         .daily-quote { font-style: italic; font-size: 12px; color: var(--accent); text-align: center; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
         #love-timer { font-size: 18px; font-weight: 700; color: var(--accent); margin-top: 5px; text-align: center;}
         
@@ -106,7 +98,6 @@
         .mood-emoji { font-size: 24px; margin-top: 5px; cursor: pointer; transition: 0.3s; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 12px; display: inline-block;}
         .mood-emoji:hover { transform: scale(1.1); background: rgba(255,255,255,0.1); }
         .mood-text { font-size: 12px; font-weight: 500; margin-top: 5px; color: var(--text-main); }
-        .status-text { font-size: 10px; color: var(--accent); font-style: italic; margin-top: 2px; }
 
         /* --- MODERN TABS --- */
         .tabs { 
@@ -139,7 +130,7 @@
         .sender-Afifah { background: rgba(255,82,154,0.15); color: var(--accent); }
         .sender-Andri { background: rgba(78,140,255,0.15); color: var(--andri-color); }
         .btn-kangen { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%); color: #ff4757; border: none; padding: 15px; border-radius: 16px; width: 100%; font-weight: 600; cursor: pointer; font-family: 'Poppins'; margin-bottom: 15px; font-size: 15px; box-shadow: 0 5px 15px rgba(255,154,158,0.3); transition: 0.3s;}
-        .btn-kangen:active { transform: scale(0.98); }
+        
         .btn-outline-dashed { 
             flex:1; padding:15px; border-radius:16px; border:2px dashed rgba(255,82,154,0.5); 
             background: rgba(255,82,154,0.05); color:var(--accent); cursor:pointer; margin-bottom:20px;
@@ -158,7 +149,7 @@
         .btn-dice { background: linear-gradient(135deg, #4e8cff, #2a5298); }
         .btn-music { background: var(--card-bg); border: 1px solid var(--border-light); color: var(--text-dim); }
 
-        /* General Modal */
+        /* General Modal styling */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);}
         .modal-content { background: var(--card-bg); padding: 30px; border-radius: 24px; width: 85%; max-width: 380px; border: 1px solid var(--border-light); box-shadow: 0 20px 40px rgba(0,0,0,0.5); max-height: 90vh; overflow-y: auto;}
         .modal-content input, .modal-content textarea, .modal-content select { width: 100%; padding: 15px; margin: 8px 0; background: rgba(0,0,0,0.2); border: 1px solid var(--border-light); color: white; border-radius: 12px; font-family: 'Poppins'; box-sizing: border-box; outline:none; transition: 0.3s;}
@@ -210,17 +201,6 @@
         </div>
     </div>
 
-    <div id="secret-door-modal" class="modal" style="z-index: 9999;">
-        <div class="modal-content" style="text-align: center; max-width: 320px; padding: 35px 25px;">
-            <i class="fa fa-user-secret" style="font-size: 45px; color: #f39c12; margin-bottom: 15px; text-shadow: 0 0 15px rgba(243,156,18,0.5);"></i>
-            <h3 style="margin: 0 0 10px 0; font-size: 20px; color: #f39c12;">Classified Area</h3>
-            <p style="font-size: 12px; color: var(--text-dim); margin-bottom: 20px;">Authentication required to bypass.</p>
-            <input type="password" id="secret-code-input" placeholder="••••••••••" style="text-align: center; letter-spacing: 5px; font-size: 18px; border-color:#f39c12; outline:none;">
-            <button class="btn-auth" style="margin-top: 15px; background: linear-gradient(135deg, #f39c12, #e67e22); box-shadow: 0 5px 15px rgba(243,156,18,0.3);" onclick="verifySecretCode()">BYPASS FIREWALL</button>
-            <button class="btn-cancel" onclick="closeModal('secret-door-modal')">CANCEL</button>
-        </div>
-    </div>
-
     <div id="auth-screen">
         <div class="auth-box" id="login-box">
             <h2>Sign <span>In</span></h2>
@@ -241,7 +221,7 @@
                 <option value="Andri">Aku adalah: Andri 👦🏻</option>
                 <option value="Afifah">Aku adalah: Afifah 👩🏻</option>
             </select>
-            <input type="password" id="reg-secret" class="auth-input" placeholder="Ketik Kode Rahasia Pasangan" style="border-color: var(--accent);">
+            <input type="password" id="reg-secret" class="auth-input" placeholder="Ketik Kode Rahasia" style="border-color: var(--accent);">
             
             <button class="btn-auth" onclick="doRegister()">DAFTAR & MASUK</button>
             <div class="auth-switch" onclick="toggleAuth()">Udah punya akun? <span>Masuk di sini</span></div>
@@ -250,11 +230,6 @@
 
     <div id="quiz-screen" style="display: none;">
         <div class="auth-box" style="width: 90%; max-width: 400px; padding: 30px 20px;">
-            <i class="fa fa-heart" style="position: absolute; top: 15px; left: 15px; color: var(--accent); opacity: 0.3; font-size: 20px;"></i>
-            <i class="fa fa-heart" style="position: absolute; top: 15px; right: 15px; color: var(--accent); opacity: 0.3; font-size: 20px;"></i>
-            <i class="fa fa-heart" style="position: absolute; bottom: 15px; left: 15px; color: var(--accent); opacity: 0.3; font-size: 20px;"></i>
-            <i class="fa fa-heart" id="secret-love-btn" style="position: absolute; bottom: 15px; right: 15px; color: var(--accent); opacity: 0.3; font-size: 20px; cursor: pointer;"></i>
-
             <h2 style="font-size: 20px;">Ujian <span>Penyusup</span> 🕵️‍♂️</h2>
             <p id="quiz-progress" style="font-size:12px; color:var(--text-dim); font-weight:600; letter-spacing:1px; margin-top:0;">PERTANYAAN 1 / 30</p>
             
@@ -277,12 +252,7 @@
         </nav>
 
         <div class="container">
-            <div class="dashboard-card" id="dashboard-widget">
-                <i class="corner-heart fa fa-heart" style="top: 15px; left: 15px;"></i>
-                <i class="corner-heart fa fa-heart" style="top: 15px; right: 15px;"></i>
-                <i class="corner-heart fa fa-heart" style="bottom: 15px; left: 15px;"></i>
-                <i class="corner-heart fa fa-heart" style="bottom: 15px; right: 15px;"></i>
-
+            <div class="dashboard-card">
                 <div class="daily-quote" id="daily-quote-text">"Satu hari lagi bersamamu, satu hari lagi aku bersyukur."</div>
 
                 <p style="margin:0; font-size: 11px; color: var(--text-dim); text-align:center; text-transform: uppercase; letter-spacing: 2px;">Waktu Kebersamaan</p>
@@ -290,7 +260,7 @@
                 
                 <div class="milestone-list" id="milestone-container"></div>
                 <div style="text-align: center; margin-top: 15px;" id="milestone-btn-container">
-                    <button onclick="openModal('milestone-modal')" style="background:rgba(255,82,154,0.1); border:1px solid rgba(255,82,154,0.2); color:var(--accent); font-size:11px; padding: 6px 15px; border-radius: 50px; cursor:pointer; font-weight: 500; font-family: 'Poppins';">+ KELOLA HARI PENTING</button>
+                    <button onclick="openMilestoneModal()" style="background:rgba(255,82,154,0.1); border:1px solid rgba(255,82,154,0.2); color:var(--accent); font-size:11px; padding: 6px 15px; border-radius: 50px; cursor:pointer; font-weight: 500; font-family: 'Poppins';">+ KELOLA HARI PENTING</button>
                 </div>
 
                 <div class="mood-board">
@@ -298,25 +268,12 @@
                         <div class="mood-name">Andri 👦🏻</div>
                         <div class="mood-emoji" onclick="openMoodModal('Andri')" id="mood-emoji-Andri">❓</div>
                         <div class="mood-text" id="mood-text-Andri">Belum update</div>
-                        <div class="status-text" id="status-text-Andri"></div>
                     </div>
                     <div class="mood-item" style="border-left: 1px solid rgba(255,255,255,0.05);">
                         <div class="mood-name">Afifah 👩🏻</div>
                         <div class="mood-emoji" onclick="openMoodModal('Afifah')" id="mood-emoji-Afifah">❓</div>
                         <div class="mood-text" id="mood-text-Afifah">Belum update</div>
-                        <div class="status-text" id="status-text-Afifah"></div>
                     </div>
-                </div>
-            </div>
-
-            <div class="dashboard-card" id="next-date-widget" style="background: linear-gradient(145deg, #15161c, #1e2029); border-color: rgba(46,213,115,0.3);">
-                <div style="font-size:11px; color:var(--text-dim); text-transform:uppercase; letter-spacing:2px; text-align:center;"><i class="fa fa-calendar-check" style="color:#2ed573;"></i> Jadwal Ngedate Berikutnya</div>
-                <div id="next-date-title" style="font-size:16px; font-weight:600; color:white; text-align:center; margin-top:5px;">Belum Ada Jadwal</div>
-                <div id="next-date-countdown" style="font-size:14px; font-weight:700; color:#2ed573; text-align:center; margin-top:5px;">Yuk atur waktu berdua!</div>
-                
-                <div style="text-align: center; margin-top: 15px; display:flex; justify-content:center; gap:10px;" id="btn-set-date-container">
-                    <button onclick="openModal('next-date-modal')" style="background:rgba(46,213,115,0.1); border:1px solid rgba(46,213,115,0.3); color:#2ed573; font-size:11px; padding: 6px 15px; border-radius: 50px; cursor:pointer; font-weight: 500; font-family: 'Poppins';">Atur Jadwal</button>
-                    <button id="btn-delete-date" onclick="deleteNextDate()" style="display:none; background:rgba(255,71,87,0.1); border:1px solid rgba(255,71,87,0.3); color:#ff4757; font-size:11px; padding: 6px 15px; border-radius: 50px; cursor:pointer; font-weight: 500; font-family: 'Poppins';"><i class="fa fa-trash"></i> Hapus</button>
                 </div>
             </div>
 
@@ -349,7 +306,7 @@
             </div>
 
             <div id="game-view" style="display:none;">
-                <button class="btn-outline-dashed" onclick="openModal('create-game-modal')" id="btn-add-game" style="background: rgba(46, 213, 115, 0.05); border-color: #2ed573; color: #2ed573;">+ BIKIN TEBAKAN BARU 🎮</button>
+                <button class="btn-outline-dashed" onclick="openModal('create-game-modal')" id="btn-add-game" style="background: rgba(46, 213, 115, 0.05); border-color: #2ed573; color: #2ed573;">+ BIKIN TEBAK-TEBAKAN BARU 🎮</button>
                 <div id="games-container"></div>
             </div>
 
@@ -372,7 +329,7 @@
     </div>
 
     <div id="mood-modal" class="modal"><div class="modal-content" style="text-align:center;">
-        <h3>Update Kondisi Kamu</h3>
+        <h3>Set Mood Kamu Hari Ini</h3>
         <select id="mood-selector" style="font-size: 16px; text-align:center;">
             <option value="😄|Lagi Seneng">😄 Lagi Seneng</option>
             <option value="🥺|Lagi Kangen">🥺 Lagi Kangen</option>
@@ -381,8 +338,7 @@
             <option value="👿|Lagi Bete/PMS">👿 Lagi Bete/PMS</option>
             <option value="😴|Ngantuk">😴 Ngantuk</option>
         </select>
-        <input type="text" id="mood-status" placeholder="Lagi ngapain sekarang? (Cth: Nugas, rebahan)" style="margin-top:10px; font-size:13px;">
-        <button class="btn-auth" onclick="saveMood()">UPDATE STATUS</button>
+        <button class="btn-auth" onclick="saveMood()">UPDATE MOOD</button>
         <button class="btn-cancel" onclick="closeModal('mood-modal')">Batal</button>
     </div></div>
 
@@ -428,21 +384,12 @@
         <button class="btn-cancel" onclick="closeModal('milestone-modal')">Tutup</button>
     </div></div>
 
-    <div id="next-date-modal" class="modal"><div class="modal-content">
-        <h3 style="color:#2ed573;">Jadwal Kencan 🍿</h3>
-        <p style="font-size:12px; color:var(--text-dim); margin-top:0;">Atur jadwal ngedate kita biar makin semangat nunggunya!</p>
-        <input type="text" id="nd-title" placeholder="Mau ke mana/ngapain? (Cth: Nonton Bioskop)">
-        <input type="datetime-local" id="nd-date">
-        <button class="btn-auth" style="background: linear-gradient(135deg, #2ed573, #7bed9f); box-shadow: 0 5px 15px rgba(46,213,115,0.3); margin-top:15px;" onclick="saveNextDate()">SIMPAN JADWAL</button>
-        <button class="btn-cancel" onclick="closeModal('next-date-modal')">Batal</button>
-    </div></div>
-
     <div id="create-game-modal" class="modal"><div class="modal-content">
         <h3 style="color:#2ed573;">Buat Tebakan Baru 🎮</h3>
         <p style="font-size:12px; color:var(--text-dim); margin-top:0;">Bikin pertanyaan & kasih reward foto rahasia buat pasanganmu!</p>
         <textarea id="game-question" rows="2" placeholder="Tulis pertanyaanmu di sini..."></textarea>
         <input type="text" id="game-answer" placeholder="Jawaban yang benar (Singkat aja)">
-        <label style="font-size:12px; color:var(--text-dim); display:block; margin-top:10px; text-align:left;">Upload Foto Reward:</label>
+        <label style="font-size:12px; color:var(--text-dim); display:block; margin-top:10px; text-align:left;">Upload Foto Reward (Bakal kebuka kalau dia jawab bener):</label>
         <input type="file" id="game-photo" accept="image/*">
         <button id="btn-save-game" class="btn-auth" style="background: linear-gradient(135deg, #2ed573, #7bed9f); box-shadow: 0 5px 15px rgba(46,213,115,0.3); margin-top:15px;">SIMPAN GAME</button>
         <button class="btn-cancel" onclick="closeModal('create-game-modal')">Batal</button>
@@ -497,8 +444,6 @@
         let activeUsername = localStorage.getItem('archive_username');
         let activeRole = localStorage.getItem('archive_role');
         let guestTimerInterval;
-        let nextDateTargetTime = null;
-        let isAppStarted = false; // Mencegah dobel render listener
 
         const quotes = [
             "\"Dunia itu luas, tapi tempat favoritku cuma di sebelahmu.\"",
@@ -511,7 +456,6 @@
         // --- SISTEM CUSTOM ALERT / CONFIRM ---
         window.customAlert = (title, message, type = 'info') => {
             const alertModal = document.getElementById('custom-alert');
-            if(!alertModal) return;
             const iconEl = document.getElementById('custom-alert-icon');
             const btnEl = document.getElementById('custom-alert-btn');
 
@@ -538,7 +482,6 @@
 
         window.customConfirm = (title, message, onConfirm) => {
             const confirmModal = document.getElementById('custom-confirm');
-            if(!confirmModal) return;
             document.getElementById('custom-confirm-title').innerText = title;
             document.getElementById('custom-confirm-msg').innerText = message;
             confirmModal.style.display = 'flex';
@@ -548,35 +491,10 @@
                 onConfirm();
             };
         };
+
         window.closeCustomConfirm = () => { document.getElementById('custom-confirm').style.display = 'none'; };
 
-        // --- PINTU RAHASIA KUIS (BACKDOOR MODERN) ---
-        let backdoorClicks = 0;
-        const secretBtn = document.getElementById('secret-love-btn');
-        if (secretBtn) {
-            secretBtn.onclick = () => {
-                backdoorClicks++;
-                if (backdoorClicks === 4) {
-                    backdoorClicks = 0;
-                    document.getElementById('secret-code-input').value = '';
-                    openModal('secret-door-modal');
-                }
-            };
-        }
-
-        window.verifySecretCode = () => {
-            const code = document.getElementById('secret-code-input').value;
-            if (code === "afifahandri") {
-                closeModal('secret-door-modal');
-                document.getElementById('quiz-screen').style.display = 'none';
-                localStorage.setItem('guest_start_time', Date.now()); 
-                saveLoginState('guest_bypass', 'Tamu');
-            } else {
-                customAlert("Akses Ditolak!", "Kode pintu rahasia salah 😝", "error");
-            }
-        };
-
-        // --- SISTEM KUIS FIREWALL TAMU (30 SOAL) ---
+        // --- SISTEM KUIS FIREWALL TAMU ---
         const masterQuizPool = [
             { q: "Pada tahun berapakah Konstantinopel jatuh ke tangan Kesultanan Utsmaniyah?", a: "1453", b: "1492", c: "1511", ans: "A" },
             { q: "Apa nama phobia atau ketakutan berlebihan terhadap angka 13?", a: "Arachnophobia", b: "Triskaidekaphobia", c: "Claustrophobia", ans: "B" },
@@ -627,18 +545,14 @@
         let currentQIndex = 0;
 
         window.startQuiz = () => {
-            const authScreen = document.getElementById('auth-screen');
-            const quizScreen = document.getElementById('quiz-screen');
-            if(authScreen) authScreen.style.display = 'none';
-            if(quizScreen) quizScreen.style.display = 'flex';
+            document.getElementById('auth-screen').style.display = 'none';
+            document.getElementById('quiz-screen').style.display = 'flex';
             generateNewQuizSet(null);
         };
 
         window.cancelQuiz = () => {
-            const authScreen = document.getElementById('auth-screen');
-            const quizScreen = document.getElementById('quiz-screen');
-            if(quizScreen) quizScreen.style.display = 'none';
-            if(authScreen) authScreen.style.display = 'flex';
+            document.getElementById('quiz-screen').style.display = 'none';
+            document.getElementById('auth-screen').style.display = 'flex';
         };
 
         function generateNewQuizSet(failedQuestion) {
@@ -652,10 +566,8 @@
 
         function renderQuiz() {
             const qData = activeQuizSet[currentQIndex];
-            const prog = document.getElementById('quiz-progress');
-            const qText = document.getElementById('quiz-question');
-            if(prog) prog.innerText = `PERTANYAAN ${currentQIndex + 1} / 30`;
-            if(qText) qText.innerText = qData.q;
+            document.getElementById('quiz-progress').innerText = `PERTANYAAN ${currentQIndex + 1} / 30`;
+            document.getElementById('quiz-question').innerText = qData.q;
             document.getElementById('btn-ans-a').innerText = `A. ${qData.a}`;
             document.getElementById('btn-ans-b').innerText = `B. ${qData.b}`;
             document.getElementById('btn-ans-c').innerText = `C. ${qData.c}`;
@@ -667,27 +579,32 @@
                 currentQIndex++;
                 if (currentQIndex >= 30) {
                     customAlert("Luar Biasa!", "Jawaban bener semua. Kamu lolos masuk sebagai Tamu Kehormatan! Waktu kamu cuma 1 MENIT!", "success");
-                    const qs = document.getElementById('quiz-screen');
-                    if(qs) qs.style.display = 'none';
+                    document.getElementById('quiz-screen').style.display = 'none';
                     localStorage.setItem('guest_start_time', Date.now());
                     saveLoginState('guest', 'Tamu');
                 } else {
                     renderQuiz();
                 }
             } else {
-                customAlert("TETOT!", "Jawaban salah! 🚨 Soal diacak ulang dari awal!", "error");
+                customAlert("TETOT!", "Jawaban salah! 🚨 Soal akan diacak ulang dengan soal baru dari awal!", "error");
                 generateNewQuizSet(currentQ);
             }
         };
 
-        // --- SISTEM AUTHENTICATION ---
+        // --- INIT ---
+        if(activeUsername && activeRole) {
+            document.getElementById('auth-screen').style.display = 'none';
+            document.getElementById('main-ui').style.display = 'block';
+            if(activeRole === 'Tamu') applyGuestMode();
+            startApp();
+        }
+
+        // --- AUTH SYSTEM ---
         window.toggleAuth = () => {
             const loginBox = document.getElementById('login-box');
             const regBox = document.getElementById('register-box');
-            if (loginBox && regBox) {
-                if(loginBox.style.display === 'none') { loginBox.style.display = 'block'; regBox.style.display = 'none'; }
-                else { loginBox.style.display = 'none'; regBox.style.display = 'block'; }
-            }
+            if(loginBox.style.display === 'none') { loginBox.style.display = 'block'; regBox.style.display = 'none'; }
+            else { loginBox.style.display = 'none'; regBox.style.display = 'block'; }
         };
 
         window.doRegister = async () => {
@@ -697,7 +614,10 @@
             const secretCode = document.getElementById('reg-secret').value;
             
             if(!u || !p) return customAlert("Oops!", "Isi username dan password dulu ya!", "error");
-            if(secretCode !== "andriafifah") return customAlert("Ditolak!", "Ups! Kode rahasianya salah. Menu daftar ini cuma khusus buat Andri & Afifah ya 😝", "error");
+            
+            if(secretCode !== "andriafifah") {
+                return customAlert("Ditolak!", "Ups! Kode rahasianya salah. Menu daftar ini cuma khusus buat Andri & Afifah ya 😝", "error");
+            }
 
             const allUsersSnap = await get(ref(db, 'users'));
             if(allUsersSnap.exists()) {
@@ -731,91 +651,43 @@
             saveLoginState(u, userData.role);
         };
 
-        // --- SISTEM PENGHAPUSAN BUG MODE TAMU ---
         function applyGuestMode() {
-            try {
-                // Hapus total tab terlarang
-                ['tab-notes', 'tab-bucket', 'tab-game'].forEach(id => { 
-                    const el = document.getElementById(id); if(el) el.style.display = 'none'; 
-                });
+            document.getElementById('tab-notes').style.display = 'none';
+            document.getElementById('tab-bucket').style.display = 'none';
+            document.getElementById('tab-game').style.display = 'none'; // Sembunyiin tab game
+            document.getElementById('btn-add-floating').style.display = 'none';
+            document.getElementById('btn-manage-milestone').style.display = 'none';
+            document.getElementById('btn-delete-folder').style.display = 'none';
+            document.getElementById('btn-del-photo').style.display = 'none';
+            document.getElementById('btn-like-photo').style.pointerEvents = 'none'; 
+            document.getElementById('tab-gallery').style.pointerEvents = 'none';
 
-                // Hapus total tombol admin/pasangan
-                ['btn-add-floating', 'milestone-btn-container', 'btn-set-date-container', 'btn-delete-folder', 'btn-del-photo'].forEach(id => { 
-                    const el = document.getElementById(id); if(el) el.style.display = 'none'; 
-                });
-                
-                // Extra security: Loop semua button dan hide yang tulisannya "KELOLA HARI PENTING"
-                document.querySelectorAll('button').forEach(btn => {
-                    if(btn.innerText.includes('KELOLA HARI PENTING') || btn.innerText.includes('Atur Jadwal') || btn.innerText.includes('Hapus')) {
-                        btn.style.display = 'none';
-                    }
-                });
-
-                const likeBtn = document.getElementById('btn-like-photo');
-                if (likeBtn) likeBtn.style.pointerEvents = 'none';
-
-                // Tampilkan hiasan Love di dashboard
-                const widget = document.getElementById('dashboard-widget');
-                if (widget) {
-                    const hearts = widget.querySelectorAll('.corner-heart');
-                    for (let i = 0; i < hearts.length; i++) { hearts[i].style.display = 'block'; }
-                }
-
-                // SISTEM WAKTU 60 DETIK
-                let startTime = localStorage.getItem('guest_start_time');
-                if (!startTime) {
-                    startTime = Date.now();
-                    localStorage.setItem('guest_start_time', startTime);
-                }
-                
-                const existingTimer = document.getElementById('guest-countdown');
-                if(existingTimer) existingTimer.remove();
-
-                const timerEl = document.createElement('div');
-                timerEl.id = 'guest-countdown';
-                timerEl.style.cssText = "position:fixed; top:70px; left:50%; transform:translateX(-50%); background:linear-gradient(135deg, #ff4757, #ff6b81); color:white; padding:8px 20px; border-radius:50px; font-weight:bold; z-index:9999; font-size:13px; box-shadow:0 5px 15px rgba(255,71,87,0.5); font-family: 'Poppins';";
-                document.body.appendChild(timerEl);
-
-                guestTimerInterval = setInterval(() => {
-                    let elapsed = Math.floor((Date.now() - parseInt(startTime)) / 1000);
-                    let timeLeft = 60 - elapsed; 
-                    
-                    if(timeLeft <= 0) {
-                        clearInterval(guestTimerInterval);
-                        customAlert("Waktu Habis!", "⏰ TEEEET! Waktu habis! Menendang penyusup keluar dari web... 🚀", "error");
-                        localStorage.removeItem('archive_username');
-                        localStorage.removeItem('archive_role');
-                        localStorage.removeItem('guest_start_time');
-                        setTimeout(() => location.reload(), 3000); // Reload paksa hanya setelah timer habis
-                    } else {
-                        timerEl.innerHTML = `<i class="fa fa-stopwatch"></i> Waktu Tamu: ${timeLeft} detik`;
-                    }
-                }, 1000);
-
-            } catch(e) {
-                console.error("Guest mode load aman:", e);
+            let startTime = localStorage.getItem('guest_start_time');
+            if (!startTime) {
+                startTime = Date.now();
+                localStorage.setItem('guest_start_time', startTime);
             }
-        }
+            
+            const timerEl = document.createElement('div');
+            timerEl.id = 'guest-countdown';
+            timerEl.style = "position:fixed; top:80px; left:50%; transform:translateX(-50%); background:linear-gradient(135deg, #ff4757, #ff6b81); color:white; padding:8px 20px; border-radius:50px; font-weight:bold; z-index:9999; font-size:13px; box-shadow:0 5px 15px rgba(255,71,87,0.5); font-family: 'Poppins';";
+            document.body.appendChild(timerEl);
 
-        // FUNGSI RESTORE KE MODE USER KALAU LOGIN
-        function applyUserMode() {
-            try {
-                if (guestTimerInterval) clearInterval(guestTimerInterval);
-                const timerEl = document.getElementById('guest-countdown');
-                if (timerEl) timerEl.remove();
-
-                ['tab-notes', 'tab-bucket', 'tab-game'].forEach(id => { const el = document.getElementById(id); if(el) el.style.display = ''; });
-                ['btn-add-floating', 'milestone-btn-container', 'btn-set-date-container'].forEach(id => { const el = document.getElementById(id); if(el) el.style.display = ''; });
+            guestTimerInterval = setInterval(() => {
+                let elapsed = Math.floor((Date.now() - parseInt(startTime)) / 1000);
+                let timeLeft = 60 - elapsed; 
                 
-                const likeBtn = document.getElementById('btn-like-photo');
-                if (likeBtn) likeBtn.style.pointerEvents = 'auto';
-
-                const widget = document.getElementById('dashboard-widget');
-                if (widget) {
-                    const hearts = widget.querySelectorAll('.corner-heart');
-                    for (let i = 0; i < hearts.length; i++) { hearts[i].style.display = 'none'; }
+                if(timeLeft <= 0) {
+                    clearInterval(guestTimerInterval);
+                    localStorage.removeItem('archive_username');
+                    localStorage.removeItem('archive_role');
+                    localStorage.removeItem('guest_start_time');
+                    customAlert("Waktu Habis!", "⏰ TEEEET! Waktu habis! Menendang penyusup keluar dari web... 🚀", "error");
+                    setTimeout(() => location.reload(), 3000);
+                } else {
+                    timerEl.innerHTML = `<i class="fa fa-stopwatch"></i> Waktu Tamu: ${timeLeft} detik`;
                 }
-            } catch(e) {}
+            }, 1000);
         }
 
         function saveLoginState(username, role) {
@@ -824,176 +696,94 @@
             activeUsername = username; activeRole = role;
             document.getElementById('auth-screen').style.display = 'none';
             document.getElementById('main-ui').style.display = 'block';
-            
-            if(role === 'Tamu') {
-                applyGuestMode();
-            } else {
-                applyUserMode();
-            }
+            if(role === 'Tamu') applyGuestMode();
             startApp();
         }
 
-        // --- SISTEM LOGOUT SOFT (ANTI CRASH) ---
         window.doLogout = () => {
             customConfirm("Keluar?", "Yakin mau keluar dari Archive?", () => {
                 localStorage.removeItem('archive_username');
                 localStorage.removeItem('archive_role');
                 localStorage.removeItem('guest_start_time');
-                if(guestTimerInterval) clearInterval(guestTimerInterval);
-                
-                closeCustomConfirm();
-
-                // Balikin ke layar auth tanpa location.reload()
-                document.getElementById('main-ui').style.display = 'none';
-                document.getElementById('quiz-screen').style.display = 'none';
-                document.getElementById('auth-screen').style.display = 'flex';
-                
-                document.getElementById('login-username').value = '';
-                document.getElementById('login-password').value = '';
-                
-                activeUsername = null;
-                activeRole = null;
-                currentFolderId = null;
-                
-                // Stop music if playing
-                const m = document.getElementById('bg-music');
-                const icon = document.getElementById('music-icon');
-                if(m && isPlaying) { m.pause(); icon.className = "fa fa-music"; isPlaying = false; }
+                location.reload();
             });
         };
 
-        // --- SISTEM UTAMA APP ---
         function startApp() {
-            const navGreet = document.getElementById('nav-greeting');
-            if(navGreet) navGreet.innerText = activeRole === 'Tamu' ? 'Mode Tamu 👀' : `Halo, ${activeRole}!`;
+            document.getElementById('nav-greeting').innerText = activeRole === 'Tamu' ? 'Mode Tamu 👀' : `Halo, ${activeRole}!`;
+            document.getElementById('daily-quote-text').innerText = quotes[Math.floor(Math.random() * quotes.length)];
             
-            const dq = document.getElementById('daily-quote-text');
-            if(dq) dq.innerText = quotes[Math.floor(Math.random() * quotes.length)];
+            setInterval(updateTimer, 1000); createHearts();
             
-            if(!isAppStarted) {
-                setInterval(updateTimer, 1000); createHearts();
-                
-                onValue(ref(db, 'archive'), snap => {
-                    const d = snap.val(); dataFolders = d ? Object.keys(d).map(k => ({...d[k], id: k})) : [];
-                    renderFolders(); if(currentFolderId) renderPhotos(dataFolders.find(f => f.id === currentFolderId));
-                });
-                onValue(ref(db, 'notes'), snap => {
-                    const d = snap.val(); dataNotes = d ? Object.keys(d).map(k => ({...d[k], id: k})) : [];
-                    renderNotes();
-                });
-                onValue(ref(db, 'timecapsules'), snap => {
-                    const d = snap.val(); dataCapsules = d ? Object.keys(d).map(k => ({...d[k], id: k})) : [];
-                    renderCapsules();
-                });
-                onValue(ref(db, 'bucket'), snap => {
-                    const d = snap.val(); dataBucket = d ? Object.keys(d).map(k => ({...d[k], id: k})) : [];
-                    renderBucket();
-                });
-                onValue(ref(db, 'milestones'), snap => {
-                    const d = snap.val(); dataMilestones = d ? Object.keys(d).map(k => ({...d[k], id: k})) : [];
-                    renderMilestones();
-                });
-                onValue(ref(db, 'games'), snap => {
-                    const d = snap.val(); dataGames = d ? Object.keys(d).map(k => ({...d[k], id: k})) : [];
-                    renderGames();
-                });
-                
-                onValue(ref(db, 'nextDate'), snap => {
-                    try {
-                        const d = snap.val();
-                        const titleEl = document.getElementById('next-date-title');
-                        const countEl = document.getElementById('next-date-countdown');
-                        const delBtn = document.getElementById('btn-delete-date');
-                        
-                        if(d && d.date) {
-                            if(titleEl) titleEl.innerText = d.title;
-                            nextDateTargetTime = new Date(d.date).getTime();
-                            if(delBtn && activeRole !== 'Tamu') delBtn.style.display = 'inline-block';
-                        } else {
-                            if(titleEl) titleEl.innerText = "Belum Ada Jadwal";
-                            if(countEl) countEl.innerText = "Yuk atur waktu berdua!";
-                            nextDateTargetTime = null;
-                            if(delBtn) delBtn.style.display = 'none';
-                        }
-                    } catch(e) { console.error("Safe update nd:", e); }
-                });
-                
-                onValue(ref(db, 'moods'), snap => {
-                    const d = snap.val() || {};
-                    try {
-                        if(d.Andri) {
-                            const parts = d.Andri.split('|');
-                            const moodE = document.getElementById('mood-emoji-Andri'); if(moodE) moodE.innerText = parts[0] || '❓';
-                            const moodT = document.getElementById('mood-text-Andri'); if(moodT) moodT.innerText = parts[1] || 'Belum update';
-                            const statT = document.getElementById('status-text-Andri'); if(statT) statT.innerText = parts[2] ? `"${parts[2]}"` : '';
-                        }
-                        if(d.Afifah) {
-                            const parts = d.Afifah.split('|');
-                            const moodE = document.getElementById('mood-emoji-Afifah'); if(moodE) moodE.innerText = parts[0] || '❓';
-                            const moodT = document.getElementById('mood-text-Afifah'); if(moodT) moodT.innerText = parts[1] || 'Belum update';
-                            const statT = document.getElementById('status-text-Afifah'); if(statT) statT.innerText = parts[2] ? `"${parts[2]}"` : '';
-                        }
-                    } catch(e) {}
-                });
-                isAppStarted = true;
-            } else {
-                // Kalo udah jalan, cukup re-render sesuai role yang baru login
-                renderFolders(); renderNotes(); renderCapsules(); renderBucket(); renderMilestones(); renderGames();
-            }
+            onValue(ref(db, 'archive'), snap => {
+                const d = snap.val(); dataFolders = d ? Object.keys(d).map(k => ({...d[k], id: k})) : [];
+                renderFolders(); if(currentFolderId) renderPhotos(dataFolders.find(f => f.id === currentFolderId));
+            });
+            onValue(ref(db, 'notes'), snap => {
+                const d = snap.val(); dataNotes = d ? Object.keys(d).map(k => ({...d[k], id: k})) : [];
+                renderNotes();
+            });
+            onValue(ref(db, 'timecapsules'), snap => {
+                const d = snap.val(); dataCapsules = d ? Object.keys(d).map(k => ({...d[k], id: k})) : [];
+                renderCapsules();
+            });
+            onValue(ref(db, 'bucket'), snap => {
+                const d = snap.val(); dataBucket = d ? Object.keys(d).map(k => ({...d[k], id: k})) : [];
+                renderBucket();
+            });
+            onValue(ref(db, 'milestones'), snap => {
+                const d = snap.val(); dataMilestones = d ? Object.keys(d).map(k => ({...d[k], id: k})) : [];
+                renderMilestones();
+            });
+            
+            // LISTENER GAME TEBAK-TEBAKAN
+            onValue(ref(db, 'games'), snap => {
+                const d = snap.val(); dataGames = d ? Object.keys(d).map(k => ({...d[k], id: k})) : [];
+                renderGames();
+            });
+            
+            onValue(ref(db, 'moods'), snap => {
+                const d = snap.val() || {};
+                if(d.Andri) {
+                    const parts = d.Andri.split('|');
+                    document.getElementById('mood-emoji-Andri').innerText = parts[0];
+                    document.getElementById('mood-text-Andri').innerText = parts[1];
+                }
+                if(d.Afifah) {
+                    const parts = d.Afifah.split('|');
+                    document.getElementById('mood-emoji-Afifah').innerText = parts[0];
+                    document.getElementById('mood-text-Afifah').innerText = parts[1];
+                }
+            });
         }
 
-        // TRIGGER LOGIN OTOMATIS
-        if(activeUsername && activeRole) {
-            const authS = document.getElementById('auth-screen');
-            const mainU = document.getElementById('main-ui');
-            if(authS) authS.style.display = 'none';
-            if(mainU) mainU.style.display = 'block';
-            if(activeRole === 'Tamu') applyGuestMode();
-            else applyUserMode();
-            startApp();
-        }
-
-        // --- SISTEM MOOD & STATUS ---
+        // --- MOOD SYSTEM ---
         let targetMoodRole = "";
         window.openMoodModal = (role) => {
             if(activeRole === 'Tamu') return customAlert('Dilarang!', 'Sstt! Cuma Andri & Afifah yang bisa ngubah mood! 😝', 'error');
             if(role !== activeRole) return customAlert('Eits!', `Kamu gak bisa ganti mood punya ${role} yaa! 😝`, 'error');
-            targetMoodRole = role; 
-            document.getElementById('mood-status').value = ''; // Reset input status
-            openModal('mood-modal');
+            targetMoodRole = role; openModal('mood-modal');
         };
         window.saveMood = () => {
-            const mood = document.getElementById('mood-selector').value;
-            const status = document.getElementById('mood-status').value;
-            set(ref(db, `moods/${targetMoodRole}`), `${mood}|${status}`); 
-            closeModal('mood-modal');
+            const val = document.getElementById('mood-selector').value;
+            set(ref(db, `moods/${targetMoodRole}`), val); closeModal('mood-modal');
         };
 
-        // --- NAVIGASI TABS ---
+        // --- TABS & RENDER ---
         window.switchView = (v) => {
-            ['home-view','notes-view','bucket-view','album-view', 'game-view'].forEach(id => {
-                const el = document.getElementById(id); if(el) el.style.display='none';
-            });
-            ['tab-gallery','tab-notes','tab-bucket', 'tab-game'].forEach(id => {
-                const el = document.getElementById(id); if(el) el.classList.remove('active');
-            });
+            ['home-view','notes-view','bucket-view','album-view', 'game-view'].forEach(id => document.getElementById(id).style.display='none');
+            ['tab-gallery','tab-notes','tab-bucket', 'tab-game'].forEach(id => document.getElementById(id).classList.remove('active'));
             
-            const setV = (viewId, tabId) => {
-                const view = document.getElementById(viewId); if(view) view.style.display='block';
-                const tab = document.getElementById(tabId); if(tab) tab.classList.add('active');
-            };
-
-            if(v === 'gallery') { setV('home-view', 'tab-gallery'); currentFolderId = null; }
-            if(v === 'notes') setV('notes-view', 'tab-notes');
-            if(v === 'bucket') setV('bucket-view', 'tab-bucket');
-            if(v === 'game') setV('game-view', 'tab-game');
-            if(v === 'album') { const view = document.getElementById('album-view'); if(view) view.style.display='block'; }
+            if(v === 'gallery') { document.getElementById('home-view').style.display='block'; document.getElementById('tab-gallery').classList.add('active'); currentFolderId = null; }
+            if(v === 'notes') { document.getElementById('notes-view').style.display='block'; document.getElementById('tab-notes').classList.add('active'); }
+            if(v === 'bucket') { document.getElementById('bucket-view').style.display='block'; document.getElementById('tab-bucket').classList.add('active'); }
+            if(v === 'game') { document.getElementById('game-view').style.display='block'; document.getElementById('tab-game').classList.add('active'); }
+            if(v === 'album') { document.getElementById('album-view').style.display='block'; }
         };
 
-        // --- RENDER FUNCTIONS ---
         function renderFolders() {
-            const cont = document.getElementById('folder-container'); if(!cont) return;
-            const sel = document.getElementById('upload-target'); if(!sel) return;
+            const cont = document.getElementById('folder-container');
+            const sel = document.getElementById('upload-target');
             cont.innerHTML = ''; sel.innerHTML = '<option value="new">-- Buat Folder Baru --</option>';
             dataFolders.forEach(f => {
                 const div = document.createElement('div'); div.className='folder-card';
@@ -1005,8 +795,7 @@
         }
 
         function renderPhotos(f) {
-            const cont = document.getElementById('photo-container'); if(!cont) return;
-            cont.innerHTML = '';
+            const cont = document.getElementById('photo-container'); cont.innerHTML = '';
             if(!f || !f.photos) return cont.innerHTML = '<p style="color:#666;">Belum ada foto.</p>';
             Object.keys(f.photos).reverse().forEach(k => {
                 const p = f.photos[k]; const div = document.createElement('div'); div.className='folder-card';
@@ -1017,21 +806,18 @@
         }
 
         function renderNotes() {
-            const cont = document.getElementById('notes-container'); if(!cont) return;
-            cont.innerHTML = '';
+            const cont = document.getElementById('notes-container'); cont.innerHTML = '';
             dataNotes.reverse().forEach(n => {
                 const div = document.createElement('div'); 
                 let senderName, senderClass, borderStyle;
-                let realSender = n.sender || 'Afifah'; // Pesan lama dianggap punya Afifah
                 
-                if (realSender === 'Andri') {
+                if (n.sender === 'Andri') {
                     senderName = '👦🏻 Andri'; senderClass = 'sender-Andri'; borderStyle = 'border-left: 4px solid var(--andri-color);';
+                } else if (n.sender === 'Afifah') {
+                    senderName = '👩🏻 Afifah'; senderClass = 'sender-Afifah'; borderStyle = 'border-left: 4px solid var(--accent);';
                 } else {
                     senderName = '👩🏻 Afifah'; senderClass = 'sender-Afifah'; borderStyle = 'border-left: 4px solid var(--accent);';
                 }
-                
-                // PRIVASI HAPUS DATA: HANYA SI PENGIRIM ASLI BISA MENGHAPUS!
-                let canDelete = (realSender === activeRole && activeRole !== 'Tamu');
                 
                 div.className='list-card'; div.style = borderStyle;
                 div.innerHTML = `
@@ -1042,22 +828,18 @@
                         </div>
                         <div style="white-space: pre-wrap;">${n.text}</div>
                     </div>
-                    ${canDelete ? `<button onclick="window.deleteData('notes/${n.id}')" style="color:#ff4757; background:none; border:none; cursor:pointer;"><i class="fa fa-trash"></i></button>` : ''}
+                    ${(n.sender === activeRole || !n.sender) && activeRole !== 'Tamu' ? `<button onclick="window.deleteData('notes/${n.id}')" style="color:#ff4757; background:none; border:none; cursor:pointer;"><i class="fa fa-trash"></i></button>` : ''}
                 `;
                 cont.appendChild(div);
             });
         }
 
         function renderCapsules() {
-            const cont = document.getElementById('capsules-container'); if(!cont) return;
-            cont.innerHTML = '';
+            const cont = document.getElementById('capsules-container'); cont.innerHTML = '';
             dataCapsules.reverse().forEach(c => {
                 const div = document.createElement('div'); 
                 const unlockTime = new Date(c.unlockDate).getTime();
                 const isUnlocked = Date.now() >= unlockTime;
-                
-                // PRIVASI HAPUS DATA: HANYA SI PENGIRIM ASLI BISA MENGHAPUS!
-                let canDelete = (c.sender === activeRole && activeRole !== 'Tamu');
                 
                 div.className='list-card'; div.style = 'border-left: 4px solid var(--capsule-color); background: rgba(243, 156, 18, 0.05);';
                 
@@ -1070,7 +852,7 @@
                             </div>
                             <div style="white-space: pre-wrap;">${c.text}</div>
                         </div>
-                        ${canDelete ? `<button onclick="window.deleteData('timecapsules/${c.id}')" style="color:#ff4757; background:none; border:none; cursor:pointer;"><i class="fa fa-trash"></i></button>` : ''}
+                        ${(c.sender === activeRole) && activeRole !== 'Tamu' ? `<button onclick="window.deleteData('timecapsules/${c.id}')" style="color:#ff4757; background:none; border:none; cursor:pointer;"><i class="fa fa-trash"></i></button>` : ''}
                     `;
                 } else {
                     div.innerHTML = `
@@ -1079,7 +861,7 @@
                             <div style="font-weight:600; color:var(--capsule-color);">Kapsul Waktu dari ${c.sender}</div>
                             <div style="font-size:12px; color:var(--text-dim); margin-top:5px;">Bisa dibuka pada: <b>${new Date(c.unlockDate).toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'})}</b></div>
                         </div>
-                        ${canDelete ? `<button onclick="window.deleteData('timecapsules/${c.id}')" style="color:#ff4757; background:none; border:none; cursor:pointer; position:absolute; top:15px; right:15px;"><i class="fa fa-trash"></i></button>` : ''}
+                        ${(c.sender === activeRole) && activeRole !== 'Tamu' ? `<button onclick="window.deleteData('timecapsules/${c.id}')" style="color:#ff4757; background:none; border:none; cursor:pointer; position:absolute; top:15px; right:15px;"><i class="fa fa-trash"></i></button>` : ''}
                     `;
                 }
                 cont.appendChild(div);
@@ -1087,7 +869,292 @@
         }
 
         function renderBucket() {
-            const cont = document.getElementById('bucket-container'); if(!cont) return;
-            cont.innerHTML = '';
+            const cont = document.getElementById('bucket-container'); cont.innerHTML = '';
             dataBucket.forEach(b => {
-                const div = document.createElement('div'); div.className
+                const div = document.createElement('div'); div.className = `list-card ${b.done ? 'done' : ''}`;
+                div.innerHTML = `
+                    <button class="check-btn" onclick="toggleBucket('${b.id}', ${!b.done})"><i class="fa ${b.done ? 'fa-check-circle' : 'fa-circle'}"></i></button>
+                    <div class="list-text">${b.text}</div>
+                    <button onclick="window.deleteData('bucket/${b.id}')" style="color:#ff4757; background:none; border:none; font-size:16px; cursor:pointer;"><i class="fa fa-trash"></i></button>
+                `;
+                cont.appendChild(div);
+            });
+        }
+
+        // --- RENDER GAMES ---
+        function renderGames() {
+            const cont = document.getElementById('games-container'); cont.innerHTML = '';
+            dataGames.reverse().forEach(g => {
+                const div = document.createElement('div'); 
+                div.className = 'list-card';
+                
+                // Jika tebakan INI DIBIKIN BUAT SAYA
+                if (g.target === activeRole) {
+                    if (g.isSolved) {
+                        div.style = 'border-left: 4px solid #2ed573; background: rgba(46, 213, 115, 0.05); display:block; text-align:center; padding: 25px 15px;';
+                        div.innerHTML = `
+                            <i class="fa fa-unlock" style="font-size:28px; color:#2ed573; margin-bottom:10px;"></i>
+                            <div style="font-weight:600; color:#2ed573; font-size:16px;">Reward Terbuka!</div>
+                            <div style="font-size:12px; color:var(--text-dim); margin-top:5px; margin-bottom: 15px;">Kamu berhasil jawab tebakan dari ${g.sender}</div>
+                            <button class="btn-auth" style="margin:0; padding:12px; font-size:13px; background: linear-gradient(135deg, #2ed573, #7bed9f);" onclick="openLightbox('${g.rewardPhoto}', 'game_reward', ${g.timestamp}, false)"><i class="fa fa-image"></i> LIHAT REWARD FOTO</button>
+                        `;
+                    } else {
+                        div.style = 'border-left: 4px solid #ff4757; background: rgba(255, 71, 87, 0.05); display:block; text-align:center; padding: 25px 15px;';
+                        div.innerHTML = `
+                            <i class="fa fa-gift" style="font-size:28px; color:#ff4757; margin-bottom:10px;"></i>
+                            <div style="font-weight:600; color:#ff4757; font-size:16px;">Tebakan dari ${g.sender}!</div>
+                            <div style="font-size:12px; color:var(--text-dim); margin-top:5px; margin-bottom: 15px;">Jawab dengan benar buat dapetin foto rahasia.</div>
+                            <button class="btn-auth" style="margin:0; padding:12px; font-size:13px; background: linear-gradient(135deg, #ff4757, #ff6b81);" onclick="openAnswerModal('${g.id}')">JAWAB SEKARANG</button>
+                        `;
+                    }
+                } 
+                // Jika tebakan INI SAYA YANG BIKIN (Buat ngecek statusnya)
+                else if (g.sender === activeRole) {
+                    div.style = 'border-left: 4px solid var(--text-dim); background: rgba(255, 255, 255, 0.02); display:flex;';
+                    div.innerHTML = `
+                        <div class="list-text">
+                            <div style="font-size:11px; font-weight:600; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.5px;">Buatanmu buat ${g.target}</div>
+                            <div style="margin-top:5px; font-size:13px;">Status: <b>${g.isSolved ? '<span style="color:#2ed573">Berhasil Dijawab! 🔓</span>' : '<span style="color:#ff4757">Belum Terjawab 🔒</span>'}</b></div>
+                        </div>
+                        <button onclick="window.deleteData('games/${g.id}')" style="color:#ff4757; background:none; border:none; cursor:pointer;"><i class="fa fa-trash"></i></button>
+                    `;
+                }
+
+                if (g.target === activeRole || g.sender === activeRole) {
+                    cont.appendChild(div);
+                }
+            });
+        }
+
+        function renderMilestones() {
+            const mainCont = document.getElementById('milestone-container');
+            const manageCont = document.getElementById('ms-manage-list');
+            mainCont.innerHTML = ''; manageCont.innerHTML = '';
+            dataMilestones.sort((a,b) => new Date(a.date) - new Date(b.date)).forEach(m => {
+                const dateStr = new Date(m.date).toLocaleDateString('id-ID', {day:'numeric', month:'short', year:'numeric'});
+                mainCont.innerHTML += `<div class="milestone-item"><span>${m.title}</span><span>${dateStr}</span></div>`;
+                manageCont.innerHTML += `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; font-size:12px; background:rgba(255,255,255,0.05); padding:8px 12px; border-radius:8px;">${m.title} <br><span style="color:#a0a0a0">${dateStr}</span> <button onclick="window.deleteData('milestones/${m.id}')" style="color:#ff4757; background:none; border:none; cursor:pointer;"><i class="fa fa-times"></i></button></div>`;
+            });
+        }
+
+        // --- ACTIONS & MODALS ---
+        window.openModal = id => document.getElementById(id).style.display = 'flex';
+        window.closeModal = id => document.getElementById(id).style.display = 'none';
+        
+        window.deleteData = path => { 
+            customConfirm("Hapus Data?", "Yakin mau hapus data ini permanen?", () => {
+                remove(ref(db, path));
+            });
+        };
+
+        document.getElementById('btn-process-upload').onclick = async () => {
+            const btn = document.getElementById('btn-process-upload'); const files = document.getElementById('file-input').files;
+            if(!files.length) return customAlert("Tunggu!", "Pilih fotonya dulu dong sebelum upload!", "info");
+            btn.innerText = "Mengupload..."; btn.disabled = true;
+            const target = document.getElementById('upload-target').value;
+            let fId = target;
+            if(target === "new") {
+                const nRef = push(ref(db, 'archive')); fId = nRef.key;
+                await set(nRef, {name: (document.getElementById('new-folder-name').value || "NEW FOLDER").toUpperCase()});
+            }
+            for(let f of files) {
+                const b64 = await compress(f);
+                await push(ref(db, `archive/${fId}/photos`), {url: b64, timestamp: Date.now(), liked: false});
+            }
+            btn.innerText = "UPLOAD FOTO"; btn.disabled = false; document.getElementById('file-input').value = ''; closeModal('upload-modal');
+        };
+
+        document.getElementById('btn-save-note').onclick = () => {
+            const t = document.getElementById('note-input').value;
+            if(t) push(ref(db, 'notes'), {text: t, timestamp: Date.now(), sender: activeRole});
+            document.getElementById('note-input').value = ''; closeModal('note-modal');
+        };
+
+        window.saveCapsule = () => {
+            const t = document.getElementById('capsule-input').value;
+            const d = document.getElementById('capsule-date').value;
+            if(!t || !d) return customAlert("Belum Lengkap!", "Isi pesan dan pilih tanggal bukanya ya!", "info");
+            
+            push(ref(db, 'timecapsules'), {text: t, unlockDate: d, sender: activeRole, timestamp: Date.now()});
+            document.getElementById('capsule-input').value = ''; document.getElementById('capsule-date').value = '';
+            closeModal('capsule-modal');
+        };
+
+        window.sendKangenPing = () => {
+            const emoji = activeRole === 'Andri' ? '👦🏻' : '👩🏻';
+            const msg = `🚨 PING DARURAT! 🚨\n\n${emoji} ${activeRole} lagi kangen berat banget nih sama kamu! Buruan bales atau samperin sekarang! 🥺❤️`;
+            push(ref(db, 'notes'), {text: msg, timestamp: Date.now(), sender: activeRole});
+            customAlert("Terkirim!", "Ping kangen berhasil dikirim ke chat! 🥺❤️", "success");
+        };
+
+        document.getElementById('btn-save-bucket').onclick = () => {
+            const t = document.getElementById('bucket-input').value;
+            if(t) push(ref(db, 'bucket'), {text: t, done: false});
+            document.getElementById('bucket-input').value = ''; closeModal('bucket-modal');
+        };
+        window.toggleBucket = (id, s) => { if(activeRole !== 'Tamu') update(ref(db, `bucket/${id}`), {done: s}); };
+        
+        window.openMilestoneModal = () => openModal('milestone-modal');
+        document.getElementById('btn-save-ms').onclick = () => {
+            const t = document.getElementById('ms-title').value, d = document.getElementById('ms-date').value;
+            if(t && d) push(ref(db, 'milestones'), {title: t, date: d});
+            document.getElementById('ms-title').value = ''; document.getElementById('ms-date').value = '';
+        };
+
+        // --- GAME LOGIC ---
+        document.getElementById('btn-save-game').onclick = async () => {
+            const q = document.getElementById('game-question').value;
+            const a = document.getElementById('game-answer').value;
+            const file = document.getElementById('game-photo').files[0];
+            
+            if(!q || !a || !file) return customAlert("Belum Lengkap", "Isi pertanyaan, jawaban, dan upload fotonya dulu ya!", "error");
+            
+            const btn = document.getElementById('btn-save-game');
+            btn.innerText = "MENYIMPAN..."; btn.disabled = true;
+            
+            const b64 = await compress(file);
+            const target = activeRole === 'Andri' ? 'Afifah' : 'Andri';
+            
+            await push(ref(db, 'games'), {
+                sender: activeRole,
+                target: target,
+                question: q,
+                answer: a.toLowerCase().trim(),
+                rewardPhoto: b64,
+                isSolved: false,
+                timestamp: Date.now()
+            });
+            
+            btn.innerText = "SIMPAN GAME"; btn.disabled = false;
+            document.getElementById('game-question').value = '';
+            document.getElementById('game-answer').value = '';
+            document.getElementById('game-photo').value = '';
+            closeModal('create-game-modal');
+            customAlert("Berhasil!", `Tebakan berhasil dikirim ke ${target}! Tinggal nunggu dia bisa jawab apa nggak wkwk`, "success");
+        };
+
+        window.openAnswerModal = (id) => {
+            const g = dataGames.find(x => x.id === id);
+            if(!g) return;
+            document.getElementById('ans-game-title').innerText = `Dari: ${g.sender}`;
+            document.getElementById('ans-game-question').innerText = `"${g.question}"`;
+            document.getElementById('ans-game-id').value = id;
+            document.getElementById('ans-game-input').value = '';
+            openModal('answer-game-modal');
+        };
+
+        window.checkGameAnswer = () => {
+            const id = document.getElementById('ans-game-id').value;
+            const ansInput = document.getElementById('ans-game-input').value.toLowerCase().trim();
+            const g = dataGames.find(x => x.id === id);
+            
+            if(!ansInput) return;
+            
+            if (ansInput === g.answer) {
+                update(ref(db, `games/${id}`), {isSolved: true});
+                closeModal('answer-game-modal');
+                customAlert("YAY BENAR! 🎉", "Jawaban kamu pas banget! Selamat menikmati foto rahasianya 😍", "success");
+                setTimeout(() => openLightbox(g.rewardPhoto, 'game_reward', g.timestamp, false), 2000);
+            } else {
+                customAlert("TETOT!", "Jawaban kamu salah! Coba pikir-pikir lagi deh 😝", "error");
+            }
+        };
+
+        document.getElementById('btn-delete-folder').onclick = () => {
+            customConfirm("Hapus Folder?", "Hapus seluruh folder ini beserta foto di dalamnya? Gak bisa dibalikin lho!", () => {
+                remove(ref(db, `archive/${currentFolderId}`)); 
+                switchView('gallery');
+            });
+        };
+
+        // --- LIGHTBOX ---
+        window.openLightbox = (url, id, ts, liked) => {
+            activePhoto = {url, id, ts, liked};
+            document.getElementById('lightbox').style.display='flex'; document.getElementById('lightbox-img').src=url;
+            document.getElementById('lb-date').innerText = new Date(ts).toLocaleDateString('id-ID');
+            
+            if (id === 'game_reward') {
+                document.getElementById('btn-like-photo').style.display = 'none';
+                document.getElementById('btn-del-photo').style.display = 'none';
+            } else {
+                document.getElementById('btn-like-photo').style.display = 'block';
+                document.getElementById('btn-del-photo').style.display = 'block';
+                document.getElementById('btn-like-photo').className = `btn-heart ${liked ? 'active' : ''}`;
+            }
+        };
+        window.closeLightbox = () => document.getElementById('lightbox').style.display='none';
+        
+        window.toggleLike = () => {
+            if(activeRole === 'Tamu') return;
+            if(activePhoto.id === 'game_reward') return; // Gabisa dilike
+            activePhoto.liked = !activePhoto.liked;
+            update(ref(db, `archive/${currentFolderId}/photos/${activePhoto.id}`), {liked: activePhoto.liked});
+            document.getElementById('btn-like-photo').className = `btn-heart ${activePhoto.liked ? 'active' : ''}`;
+        };
+        
+        document.getElementById('btn-del-photo').onclick = async () => {
+            if(activePhoto.id === 'game_reward') return; // Gabisa dihapus dari lightbox
+            customConfirm("Hapus Foto?", "Yakin mau hapus foto ini selamanya?", async () => {
+                await remove(ref(db, `archive/${currentFolderId}/photos/${activePhoto.id}`)); 
+                closeLightbox();
+            });
+        };
+        
+        document.getElementById('btn-dl-photo').onclick = () => {
+            const a = document.createElement('a'); a.href = activePhoto.url; a.download = `Memories_${activePhoto.ts}.jpg`; a.target = '_blank'; a.click();
+        };
+
+        window.showRandomMemory = () => {
+            const all = [];
+            dataFolders.forEach(f => { if(f.photos) Object.keys(f.photos).forEach(k => all.push({...f.photos[k], id: k, fId: f.id})); });
+            if(!all.length) return customAlert("Kosong", "Belum ada foto yang bisa di-random nih!", "info");
+            const r = all[Math.floor(Math.random()*all.length)];
+            currentFolderId = r.fId; openLightbox(r.url, r.id, r.timestamp, r.liked);
+        };
+
+        // --- HELPERS ---
+        async function compress(file) {
+            return new Promise(res => {
+                const r = new FileReader();
+                r.onload = e => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        const MAX = 1080; let w = img.width, h = img.height;
+                        if(w > MAX) { h *= MAX/w; w = MAX; }
+                        canvas.width = w; canvas.height = h;
+                        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                        res(canvas.toDataURL('image/jpeg', 0.8));
+                    };
+                    img.src = e.target.result;
+                };
+                r.readAsDataURL(file);
+            });
+        }
+
+        function updateTimer() {
+            const diff = Date.now() - new Date("2025-11-22T00:00:00").getTime();
+            const d = Math.floor(diff/86400000), h = Math.floor((diff%86400000)/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000);
+            document.getElementById('love-timer').innerText = `${d} HARI, ${h} JAM, ${m} MNT, ${s} DTK`;
+        }
+
+        function createHearts() {
+            setInterval(() => {
+                const h = document.createElement('div'); h.className='heart-bg'; h.innerHTML='🤍';
+                h.style.left = Math.random()*100+'vw'; h.style.animationDuration = (Math.random()*4+3)+'s';
+                document.getElementById('hearts-container').appendChild(h);
+                setTimeout(() => h.remove(), 6000);
+            }, 1500);
+        }
+
+        let isPlaying = false;
+        window.toggleMusic = () => {
+            const m = document.getElementById('bg-music');
+            const icon = document.getElementById('music-icon');
+            if(isPlaying) { m.pause(); icon.className = "fa fa-music"; }
+            else { m.play(); icon.className = "fa fa-pause"; }
+            isPlaying = !isPlaying;
+        };
+    </script>
+</body>
+</html>
